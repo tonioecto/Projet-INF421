@@ -12,15 +12,15 @@ public class Polymino {
 	//Case[] form; 
 	int[] xCoords;
 	int[] yCoords;
+	
 	int width;
 	int height;
+	
 	int maxx;
 	int maxy;
 	int minx;
 	int miny;
 	
-	int origineX;
-	int origineY;
 	
 	public Polymino(String str){
 		str=str.replace("[", "");
@@ -46,11 +46,15 @@ public class Polymino {
 			yCoords[i/2]=Integer.parseInt(coor[i+1]);
 			if(xCoords[i/2]>maxx) maxx = xCoords[i/2];
 			if(xCoords[i/2]<minx) minx = xCoords[i/2];
-			if(yCoords[i/2]>maxy) maxy = xCoords[i/2];
-			if(yCoords[i/2]<miny) miny = xCoords[i/2];
+			if(yCoords[i/2]>maxy) maxy = yCoords[i/2];
+			if(yCoords[i/2]<miny) miny = yCoords[i/2];
 		}
-		width = maxy-miny;  
-		height = maxx-minx;	
+		this.maxx=maxx;
+		this.minx=minx;
+		this.maxy=maxy;
+		this.miny=miny;
+		height = maxy-miny+1;  
+		width = maxx-minx+1;	
 	}
 	
 
@@ -128,19 +132,44 @@ public class Polymino {
 		this.height=temp;
 	}
 	
-	public void reframe(){ 
-		int maxa=Integer.MAX_VALUE;
-		int maxo=Integer.MAX_VALUE;
-//		for(Case c:this.form){
-//			if(c.abscisse<maxa) maxa=c.abscisse;
-//			if(c.ordonnee<maxo) maxo=c.ordonnee;
-//		}
-		for(int i = 0; i<this.size; i++){
-			if(xCoords[i]<maxa) maxa= xCoords[i];
-			if(yCoords[i]<maxo) maxo= yCoords[i];
-		}
+	public Polymino reflection(boolean vertical){
+		Polymino poly = new Polymino(this.size);
 		
-		this.translate(new int[]{-maxa,-maxo});
+		if(vertical){
+			for(int i = 0; i<this.size; i++){
+				poly.xCoords[i]=-this.xCoords[i];
+				poly.yCoords[i]=this.yCoords[i];
+			}
+			poly.maxx=-this.minx;
+			poly.minx=-this.maxx;
+
+
+		}
+		else{
+			for(int i = 0; i<this.size; i++){
+				poly.xCoords[i]=this.xCoords[i];
+				poly.yCoords[i]=-this.yCoords[i];
+				
+			}
+			poly.maxy=-this.miny;
+			poly.miny=-this.maxy;
+		}
+		return poly;
+	}
+	
+	public void reframe(){ 
+//		int maxa=Integer.MAX_VALUE;
+//		int maxo=Integer.MAX_VALUE;
+////		for(Case c:this.form){
+////			if(c.abscisse<maxa) maxa=c.abscisse;
+////			if(c.ordonnee<maxo) maxo=c.ordonnee;
+////		}
+//		for(int i = 0; i<this.size; i++){
+//			if(xCoords[i]<maxa) maxa= xCoords[i];
+//			if(yCoords[i]<maxo) maxo= yCoords[i];
+//		}
+		
+		this.translate(new int[]{-this.minx,-this.miny});
 	}
 	
 	static public Polygon toPolygone(Polymino p){
@@ -226,20 +255,20 @@ public class Polymino {
 		int width=10; // marge à gauche
 		int height=0;
 		for(Polymino poly2:liste){
-			//Polymino poly = poly2.expand(30);
-			Polymino poly = poly2;
+			Polymino poly = poly2.expand(50);
+			//poly.reframe();
+			//Polymino poly = poly2;
 			liste2.add(poly);
 			width+=poly.width+20;
 			if(height<poly.height) height=poly.height;
 		}
 		Image2D image= new Image2D(width,height+40);
 		Image2dViewer imagev = new Image2dViewer(image);
-		int curseur=0;
+		int curseur=10;
 		for(Polymino poly:liste2){
-			poly.translate(new int[] {curseur+10, 20});
-			curseur+=10+poly.width;
+			poly.translate(new int[] {curseur, 20});
+			curseur+=poly.width+20;
 			image.addPixel(poly.xCoords, poly.yCoords, Color.RED);
-			curseur+=10;
 		}
 	}
 
