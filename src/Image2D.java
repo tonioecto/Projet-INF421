@@ -8,14 +8,14 @@ import javax.swing.JFrame;
 public class Image2D {
 	private int width; // width of the image
 	private int height; // height of the image
-	private java.util.List<ColoredPixels> coloredPixels; // colored polygons in the image
+	private java.util.List<ColoredCases> coloredCases; // colored polygons in the image
 	private java.util.List<Edge> edges; // edges to add to separate polygons
 
 	// Constructor that instantiates an image of a specified width and height
 	public Image2D(int width, int height) {
 		this.width = width;
 		this.height = height;
-		coloredPixels = Collections.synchronizedList(new LinkedList<ColoredPixels>());
+		coloredCases = Collections.synchronizedList(new LinkedList<ColoredCases>());
 		edges = Collections.synchronizedList(new LinkedList<Edge>());
 	}
 
@@ -30,8 +30,8 @@ public class Image2D {
 	}
 
 	// Return the colored polygons of the image
-	public java.util.List<ColoredPixels> getColoredPixels() {
-		return coloredPixels;
+	public java.util.List<ColoredCases> getColoredCases() {
+		return coloredCases;
 	}
 
 	// Return the edges of the image
@@ -39,9 +39,9 @@ public class Image2D {
 		return edges;
 	}
 
-	// Create the polygon with xcoords, ycoords and color 
-	public void addPixel(int[] xcoords, int[] ycoords, Color color) {
-		coloredPixels.add(new ColoredPixels(xcoords, ycoords, color));
+
+	public void addCase(int x, int y, Color color, int size) {
+		coloredCases.add(new ColoredCases(x, y, color,size));
 	}
 	
 	// Create the edge with coordinates x1, y1, x2, y2
@@ -51,7 +51,7 @@ public class Image2D {
 	
 	// Clear the picture
 	public void clear() {
-		coloredPixels = Collections.synchronizedList(new LinkedList<ColoredPixels>());
+		coloredCases = Collections.synchronizedList(new LinkedList<ColoredCases>());
 		edges = Collections.synchronizedList(new LinkedList<Edge>());		
 	}
 }
@@ -76,13 +76,10 @@ class Image2dComponent extends JComponent {
         g2.clearRect(0,0,d.width,d.height);
         
         // draw the polygons
-		synchronized (img.getColoredPixels()) {
-			for (ColoredPixels coloredPixel : img.getColoredPixels()) {
-				g2.setColor(coloredPixel.color);
-				for(int i=0; i<coloredPixel.size; i++){
-					g2.draw(new Rectangle(coloredPixel.xCoords[i],d.height-coloredPixel.yCoords[i],1,1));
-				}
-				
+		synchronized (img.getColoredCases()) {
+			for (ColoredCases coloredCase : img.getColoredCases()) {
+				g2.setColor(coloredCase.color);
+				g2.fill(coloredCase.rectangle);
 			}
 		}
 		
