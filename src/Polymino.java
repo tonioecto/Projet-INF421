@@ -57,6 +57,17 @@ public class Polymino {
 		width = maxx-minx+1;	
 	}
 	
+	public boolean equals(Polymino poly){  // temps quadratique, améliorable avec tri + recherche linéaire. On suppose centrée les 2 polyonimo
+		for(int i=0; i<this.size; i++){
+			boolean bon = false;
+			for(int j=0; j<this.size; j++){
+				if(this.xCoords[i]==poly.xCoords[j] && this.yCoords[i]==poly.yCoords[j]) bon = true;
+			}
+			if(!bon) return false;
+		}
+		return true;
+	}
+	
 
 	
 	
