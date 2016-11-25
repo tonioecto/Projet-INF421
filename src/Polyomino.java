@@ -12,8 +12,9 @@ public class Polyomino {  // Pas de négatif, tout est centré
 	LinkedList<Case> cases;
 	int width;
 	int height;
+	int minx;
+	int miny;
 	
-	int key;  // A implementer
 	
 	public Polyomino(String str){
 		str=str.replace("[", "");
@@ -25,7 +26,8 @@ public class Polyomino {  // Pas de négatif, tout est centré
 		
 		width= Integer.MIN_VALUE;
 		height = Integer.MIN_VALUE;
-
+		minx=0;
+		miny=0;
 		
 		size= coor.length/2;
 		cases = new LinkedList<Case>();;
@@ -36,12 +38,15 @@ public class Polyomino {  // Pas de négatif, tout est centré
 			if(Integer.parseInt(coor[i+1])>height) height=Integer.parseInt(coor[i+1]);
 
 		}
+		for (Case c:this.cases){miny=Math.min(miny, c.ordonnee);minx=Math.min(minx, c.abscisse);}
 	
 	}
 	
 	
 	public Polyomino(){	
 		size=0;
+		minx=0;
+		miny=0;
 		cases = new LinkedList<Case>();
 		width=0;
 		height=0;
@@ -52,6 +57,8 @@ public class Polyomino {  // Pas de négatif, tout est centré
 		this.size++;
 		if(c.abscisse>this.width) this.width=c.abscisse;
 		if(c.ordonnee>this.height) this.height=c.ordonnee;
+		if(c.abscisse<this.minx) this.minx=c.abscisse;
+		if(c.ordonnee<this.miny) this.miny=c.ordonnee;
 	}
 	
 	public void translate(int[] coor){ // A test
@@ -61,6 +68,8 @@ public class Polyomino {  // Pas de négatif, tout est centré
 		}
 		this.height+=coor[1];
 		this.width+=coor[0];
+		this.miny+=coor[1];
+		this.minx+=coor[0];
 	}
 	
 	public void rotate(boolean trigo){ // A test (bon ?)
@@ -87,6 +96,9 @@ public class Polyomino {  // Pas de négatif, tout est centré
 		int temp=this.width;
 		this.width=this.height;
 		this.height=temp;
+		temp=this.minx;
+		this.minx=this.miny;
+		this.miny=temp;
 		
 	}
 	
@@ -113,6 +125,7 @@ public class Polyomino {  // Pas de négatif, tout est centré
 		}
 		return poly;
 	}
+	//peut etre probleme sur cette fonction avec les minx miny
 	
 	// Rajouter une origine ?
 	// Comment rajouter une case en négatif? (En temps acceptable évidemment)
@@ -185,6 +198,81 @@ public class Polyomino {  // Pas de négatif, tout est centré
 	}
 	
 	
-	
-	
+	public static int bijN(int a,int b){
+		//fait la bijection des entiers dans le plan des entiers
+		return ((a+b)^2+3*a+b)/2;
+	}
+	public Polyomino recentre(){
+		//recentre un polynome le plus dans le coin droite possible
+		Polyomino res=new Polyomino();
+		for (Case c:this.cases){Case c1=new Case(c.abscisse-minx,c.ordonnee-miny);res.addCase(c1);}	
+		return res;
+	}
+	public int valeurPrem(){
+		String[] prem = "premier.txt".split(" ");
+		int res=1;
+		for (Case c:this.cases){
+			int bij=bijN(c.abscisse,c.ordonnee);
+			res= res*Integer.parseInt(prem[bij]);
+			}
+		return res;
+		
+	}
+	public boolean testFixed(Polyomino a, Polyomino b){
+		if (a.recentre().valeurPrem()==b.recentre().valeurPrem()){return true;}
+		return false;
+	}
+	public boolean inPoly(Case c){
+		for (Case k:this.cases){
+			if (k.abscisse==c.abscisse && k.ordonnee==c.ordonnee){return true;}
+		}
+		return false;
+	}
+	public boolean inFixedList(LinkedList<Polyomino> l){
+		for (Polyomino p:l){
+			if(testFixed(this,p)){return true;}
+		}
+		return false;
+	}
+	public LinkedList<Polyomino> genFixed(int n){
+		LinkedList<Polyomino> result= new LinkedList<Polyomino>();
+		if (n==1){Polyomino p=new Polyomino();p.addCase(new Case(0,0));result.add(p);}
+		else{
+			LinkedList<Polyomino> stock=genFixed(n-1);
+			for (Polyomino p:stock){
+				int[] t=new int[1] ;
+				t[0]=1;
+				t[1]=1;
+				p.recentre().translate(t);
+				for (Case c:p.cases){
+					Case c1=new Case(c.abscisse,c.ordonnee+1);
+					if (!p.inPoly(c1)){
+						Polyomino p1=p;
+						p1.addCase(c1);
+						if(!p1.inFixedList(result)){result.add(p1);}
+					}
+					c1=new Case(c.abscisse,c.ordonnee-1);
+					if (!p.inPoly(c1)){
+						Polyomino p1=p;
+						p1.addCase(c1);
+						if(!p1.inFixedList(result)){result.add(p1);}
+					}
+					c1=new Case(c.abscisse+1,c.ordonnee);
+					if (!p.inPoly(c1)){
+						Polyomino p1=p;
+						p1.addCase(c1);
+						if(!p1.inFixedList(result)){result.add(p1);}
+					}
+					c1=new Case(c.abscisse-1,c.ordonnee);
+					if (!p.inPoly(c1)){
+						Polyomino p1=p;
+						p1.addCase(c1);
+						if(!p1.inFixedList(result)){result.add(p1);}
+					}
+					
+				}
+			}
+		}
+		return result;
+	}
 }
