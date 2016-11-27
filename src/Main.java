@@ -40,7 +40,7 @@ public class Main {
 		
 		
 		//Image2D frame= new Image2D(1000,1000);
-		//Image2dViewer test2 = new Image2dViewer(frame);                             //Ne peut pas être séparé ?
+		//Image2dViewer test2 = new Image2dViewer(frame);                             //Ne peut pas ï¿½tre sï¿½parï¿½ ?
 		
 		//Polyomino a = new Polyomino("[(0,0), (0,2),(1,1),(1,0),(1,2),(2,1)]");
 		//Polyomino b = new Polyomino("[(0,0), (0,2),(1,1),(1,0),(1,2),(2,1)]");
@@ -58,13 +58,14 @@ public class Main {
 		
 		//System.out.println(Polyomino.equals(a, d)); //true
 		
-		//Polyomino.enumFixed(6);
+		//Polyomino.enumFixed(4);
 		
-		Polyomino a = new Polyomino("[(0,0), (0,1), (0,2)]");
-		a.addCase(new Case(-1,1));
+	//	Polyomino a = new Polyomino("[(0,0), (0,1), (0,2)]");
+	//	a.addCase(new Case(-1,1));
+		LinkedList<Polyomino> a = Polyomino.genFixed(5);
 		Image2D frame= new Image2D(1000,1000);
 		Image2dViewer test2 = new Image2dViewer(frame); 
-		Polyomino.displayPolyomino(a, 100, frame, Color.black, new int[] {0,0});
+		Polyomino.displayPolyominos(a, frame,20, Color.black);
 
 
 		
