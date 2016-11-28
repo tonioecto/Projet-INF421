@@ -100,12 +100,14 @@ class Image2dViewer extends JFrame {
 	private static final long serialVersionUID = -7498525833438154949L;
 	static int xLocation = 0;
 	Image2D img;
+	Image2dComponent img2d;
 
 	public Image2dViewer(Image2D img) {
 		this.img = img;
 		this.setLocation(xLocation, 0);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		add(new Image2dComponent(img));
+		img2d = new Image2dComponent(img);
+		add(img2d);
 		pack();
 		setVisible(true);
 		xLocation += img.getWidth();
