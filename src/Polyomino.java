@@ -207,7 +207,10 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 			poly.height=this.height; // utile ?
 			poly.width=this.width;
 		}
+		for (Case c:poly.cases){miny=Math.min(miny, c.ordonnee);minx=Math.min(minx, c.abscisse);}
+		poly.key=poly.valKey();
 		return poly;
+		
 	}
 	//peut etre probleme sur cette fonction avec les minx miny
 
@@ -286,6 +289,153 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		return a.key==b.key;
 	}
 
+	
+	public boolean Contains(Case c){
+		//il faut que la case soit bien positionnee par rapport au polyomino considere
+		if (c.abscisse>=minx && c.ordonnee>=miny){
+		return this.key%(this.primes[bijN(c.abscisse-minx,c.ordonnee-miny)])==0;}
+		else return false; 
+	}
+	
+	public Polyomino copy(){
+		Polyomino poly = new Polyomino();
+		for(Case c:this.cases){
+			poly.addCase(new Case(c.abscisse,c.ordonnee));
+		}
+		return poly;
+	}
+		
+	public int valKey(){
+		int res=1;
+		for (Case c:this.cases){
+			int bij=bijN(c.abscisse-this.minx,c.ordonnee-this.miny);
+			res= res*primes[bij];
+			}
+		return res;
+
+	}
+	public void recentre(){
+		for (Case c:this.cases){miny=Math.min(miny, c.ordonnee);minx=Math.min(minx, c.abscisse);}
+		this.translate(new int[] {-minx,-miny});
+	}
+
+	public boolean inFixedList(LinkedList<Polyomino> l){
+		for (Polyomino p:l){
+			if(equalsFixed(this,p)){return true;}
+		}
+		return false;
+	}
+	public static LinkedList<Polyomino> genFixed(int n){
+		LinkedList<Polyomino> result= new LinkedList<Polyomino>();
+		if (n==1){Polyomino p=new Polyomino();p.addCase(new Case(0,0));result.add(p);}
+		else{
+			LinkedList<Polyomino> stock=genFixed(n-1);
+			//result=genFixed(n-1);
+			for (Polyomino po:stock){
+				Polyomino p=po.copy();
+				
+				p.translate(new int[] {1,1} );
+				
+				for (Case c:p.cases){
+					Case c1=new Case(c.abscisse,c.ordonnee+1);
+					if (!p.Contains(c1)){
+						Polyomino p1=p.copy();
+						p1.addCase(c1);
+						if(!p1.inFixedList(result)){p1.recentre();result.add(p1);}
+					}
+					c1=new Case(c.abscisse,c.ordonnee-1);
+					if (!p.Contains(c1)){
+						Polyomino p4=p.copy();
+						p4.addCase(c1);
+						if(!p4.inFixedList(result)){p4.recentre();result.add(p4);}}
+					c1=new Case(c.abscisse+1,c.ordonnee);
+					if (!p.Contains(c1)){
+						Polyomino p2=p.copy();
+						p2.addCase(c1);
+						if(!p2.inFixedList(result)){p2.recentre();result.add(p2);}
+					}
+					c1=new Case(c.abscisse-1,c.ordonnee);
+					if (!p.Contains(c1)){
+						Polyomino p3=p.copy();
+						p3.addCase(c1);
+						if(!p3.inFixedList(result)){p3.recentre();result.add(p3);} }
+
+				}
+				p.recentre( );
+			}
+		}
+		return result;
+	}
+	public boolean inFreeList(LinkedList<Polyomino> l){
+		for (Polyomino p:l){
+			if(equalsFree(this,p)){return true;}
+		}
+		return false;
+	}
+	public boolean equalsFree(Polyomino a,Polyomino b){
+		if (equalsFixed(a,b)){return true;}
+		Polyomino p=b.copy();
+		p.rotate(true);
+		if (equalsFixed(a,p)){return true;}
+		p.rotate(true);
+		if (equalsFixed(a,p)){return true;}
+		p.rotate(true);
+		if (equalsFixed(a,p)){return true;}
+		Polyomino p1=b.copy();
+		if (equalsFixed(a,p1.reflection(true))){return true;}
+		if (equalsFixed(a,p1.reflection(false))){return true;}
+		Polyomino p2=b.copy();
+		p2.rotate(true);
+		if (equalsFixed(a,p2.reflection(true))){return true;}
+		if (equalsFixed(a,p2.reflection(false))){return true;}
+		return false;
+	}
+	public static LinkedList<Polyomino> genFree(int n){
+		LinkedList<Polyomino> result= new LinkedList<Polyomino>();
+		if (n==1){Polyomino p=new Polyomino();p.addCase(new Case(0,0));result.add(p);}
+		else{
+			LinkedList<Polyomino> stock=genFree(n-1);
+			//result=genFixed(n-1);
+			for (Polyomino po:stock){
+				Polyomino p=po.copy();
+				
+				p.translate(new int[] {1,1} );
+				
+				for (Case c:p.cases){
+					Case c1=new Case(c.abscisse,c.ordonnee+1);
+					if (!p.Contains(c1)){
+						Polyomino p1=p.copy();
+						p1.addCase(c1);
+						if(!p1.inFreeList(result)){p1.recentre();result.add(p1);}
+					}
+					c1=new Case(c.abscisse,c.ordonnee-1);
+					if (!p.Contains(c1)){
+						Polyomino p4=p.copy();
+						p4.addCase(c1);
+						if(!p4.inFreeList(result)){p4.recentre();result.add(p4);}}
+					c1=new Case(c.abscisse+1,c.ordonnee);
+					if (!p.Contains(c1)){
+						Polyomino p2=p.copy();
+						p2.addCase(c1);
+						if(!p2.inFreeList(result)){p2.recentre();result.add(p2);}
+					}
+					c1=new Case(c.abscisse-1,c.ordonnee);
+					if (!p.Contains(c1)){
+						Polyomino p3=p.copy();
+						p3.addCase(c1);
+						if(!p3.inFreeList(result)){p3.recentre();result.add(p3);} }
+
+				}
+				p.recentre( );
+			}
+		}
+		return result;
+	}
+	
+	
+	
+	
+	
 	public static void enumFixed(int n){
 
 		Image2D frame = new Image2D(1000,1000);
@@ -364,81 +514,5 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		}
 		System.out.println(keys.size());
 		enumFixed(n-1, listef,keys,frame, frameV);
-	}
-	public boolean Contains(Case c){
-		//il faut que la case soit bien positionnee par rapport au polyomino considere
-		if (c.abscisse>=minx && c.ordonnee>=miny){
-		return this.key%(this.primes[bijN(c.abscisse-minx,c.ordonnee-miny)])==0;}
-		else return false; 
-	}
-	
-	public Polyomino copy(){
-		Polyomino poly = new Polyomino();
-		for(Case c:this.cases){
-			poly.addCase(new Case(c.abscisse,c.ordonnee));
-		}
-		return poly;
-	}
-		
-	public int valKey(){
-		int res=1;
-		for (Case c:this.cases){
-			int bij=bijN(c.abscisse-this.minx,c.ordonnee-this.miny);
-			res= res*primes[bij];
-			}
-		return res;
-
-	}
-	public void recentre(){
-		for (Case c:this.cases){miny=Math.min(miny, c.ordonnee);minx=Math.min(minx, c.abscisse);}
-		this.translate(new int[] {-minx,-miny});
-	}
-
-	public boolean inFixedList(LinkedList<Polyomino> l){
-		for (Polyomino p:l){
-			if(equalsFixed(this,p)){return true;}
-		}
-		return false;
-	}
-	public static LinkedList<Polyomino> genFixed(int n){
-		LinkedList<Polyomino> result= new LinkedList<Polyomino>();
-		if (n==1){Polyomino p=new Polyomino();p.addCase(new Case(0,0));result.add(p);}
-		else{
-			LinkedList<Polyomino> stock=genFixed(n-1);
-			//result=genFixed(n-1);
-			for (Polyomino po:stock){
-				Polyomino p=po.copy();
-				
-				p.translate(new int[] {1,1} );
-				
-				for (Case c:p.cases){
-					Case c1=new Case(c.abscisse,c.ordonnee+1);
-					if (!p.Contains(c1)){
-						Polyomino p1=p.copy();
-						p1.addCase(c1);
-						if(!p1.inFixedList(result)){p1.recentre();result.add(p1);}
-					}
-					c1=new Case(c.abscisse,c.ordonnee-1);
-					if (!p.Contains(c1)){
-						Polyomino p4=p.copy();
-						p4.addCase(c1);
-						if(!p4.inFixedList(result)){p4.recentre();result.add(p4);}}
-					c1=new Case(c.abscisse+1,c.ordonnee);
-					if (!p.Contains(c1)){
-						Polyomino p2=p.copy();
-						p2.addCase(c1);
-						if(!p2.inFixedList(result)){p2.recentre();result.add(p2);}
-					}
-					c1=new Case(c.abscisse-1,c.ordonnee);
-					if (!p.Contains(c1)){
-						Polyomino p3=p.copy();
-						p3.addCase(c1);
-						if(!p3.inFixedList(result)){p3.recentre();result.add(p3);} }
-
-				}
-				p.recentre( );
-			}
-		}
-		return result;
 	}
 }
