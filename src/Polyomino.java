@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
-
+import java.util.Stack;
 public class Polyomino {  // Pas de n�gatif, tout est centr�
 	int size;
 	LinkedList<Case> cases;
@@ -109,7 +109,7 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 //
 //		}
 
-		if(c.abscisse<0 && c.ordonnee<0){
+		/*if(c.abscisse<0 && c.ordonnee<0){
 			this.translate(new int[] {-c.abscisse,-c.ordonnee} );
 			c.abscisse=0;
 			c.ordonnee=0;
@@ -122,7 +122,7 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		else if (c.ordonnee<0){
 			this.translate(new int[] {0,-c.ordonnee} );
 			c.ordonnee=0;
-		}
+		}*/
 
 
 		
@@ -133,8 +133,8 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		int b = c.ordonnee;
 		if (size==1){this.minx=a;this.miny=b;}
 		else {
-			if(a<this.minx) this.minx=a;
-			if(b<this.miny) this.miny=b;
+			if(a<this.minx) this.minx=a;width++;
+			if(b<this.miny) this.miny=b;height++;
 		}
 		if(a>this.width) this.width=a;
 		if(b>this.height) this.height=b;
@@ -429,9 +429,70 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 				p.recentre( );
 			}
 		}
+		System.out.print(result.size());
 		return result;
 	}
-	
+	public static LinkedList<Polyomino> add(LinkedList<Polyomino> a,LinkedList<Polyomino> b){
+		for (Polyomino p:a){
+			b.add(p);
+		}
+		return b;
+	}
+	public static LinkedList<Case> copy(LinkedList<Case> b){
+		LinkedList<Case> a=new LinkedList<Case>();
+		for (Case c:b){a.add(new Case(c.abscisse,c.ordonnee));}
+		return a;
+	}
+	 
+	//debut de la question 3
+	public static LinkedList<Polyomino> fixed( int n){
+		int[][] table=new int[2*n+4][n+4];
+		for (int i=0;i<n;i++){table[i][0]=1;}
+		LinkedList<Case> ca=new LinkedList<Case>();
+		ca.add(new Case(0,0));
+		Polyomino p=new Polyomino();
+		LinkedList<Polyomino> a=interm(table,ca,p,n);
+		System.out.println(a.size());
+		return a;
+	}
+	public static int[][] copy(int[][] t,int n){
+		int [][] res= new int[2*n+4][n+4];
+		for (int i=0;i<2*n+4;i++){for (int j=0;j<n+4;j++){res[i][j]=t[i][j];}}
+		return res;
+	}
+	public static LinkedList<Polyomino> interm(int[][] tab, LinkedList<Case> st,Polyomino p,int n){
+		LinkedList<Polyomino> result=new LinkedList<Polyomino>();
+		//System.out.println(tab[n-1][1]);
+		if (!st.isEmpty()){
+			//Case c=st.removeLast();
+			Case c=st.pop();
+			
+			tab[c.abscisse+n][c.ordonnee]=1;
+			Polyomino p1=p.copy();
+			//if (c.ordonnee==1 && c.abscisse==-1){System.out.println(p1.size); }
+			p1.addCase(new Case(c.abscisse,c.ordonnee));
+			
+			if (p1.size<n){
+				int compteur=0;
+				int [][] tabl=copy(tab,n);
+				LinkedList<Case> sta=copy(st);
+				
+				if (c.abscisse+n<2*n+4 && c.ordonnee+1<n+4 &&tabl[c.abscisse+n][c.ordonnee+1]==0){sta.add(new Case(c.abscisse,c.ordonnee+1));compteur++;tabl[c.abscisse+n][c.ordonnee+1]=1;}
+				if (c.abscisse+n+1<2*n+4 && c.ordonnee <n+4 &&tabl[c.abscisse+1+n][c.ordonnee]==0){sta.add(new Case(c.abscisse+1,c.ordonnee));compteur++;tabl[c.abscisse+n+1][c.ordonnee]=1;}
+				if (c.ordonnee-1>=0 && c.abscisse+n<2*n+4){if (tabl[c.abscisse+n][c.ordonnee-1]==0){sta.add(new Case(c.abscisse,c.ordonnee-1));compteur++;tabl[c.abscisse+n][c.ordonnee-1]=1;};}
+				if (c.abscisse-1+n<2*n+4 &&tabl[c.abscisse-1+n][c.ordonnee]==0){sta.add(new Case(c.abscisse-1,c.ordonnee));compteur++;tabl[c.abscisse+n-1][c.ordonnee]=1;}
+				
+				//LinkedList<Case> sta=copy(st);
+				//for (int i=0;i<compteur;i++){st.removeLast();}
+				result=add(result, interm(tabl,sta,p1,n));
+				
+			}
+			//System.out.println(p1.size);
+			result=add(interm(tab,st,p,n),result);result.add(p1);}
+		
+		return result;
+		
+	}
 	
 	
 	

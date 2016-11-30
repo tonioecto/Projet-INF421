@@ -61,11 +61,11 @@ public class Main {
 		//Polyomino.enumFixed(4);
 		
 	//	Polyomino a = new Polyomino("[(0,0), (0,1), (0,2)]");
-	//	a.addCase(new Case(-1,1));
-		LinkedList<Polyomino> a = Polyomino.genFree(5);
-		Image2D frame= new Image2D(1000,1000);
+	//	a.addCase(new Case(-1,1))
+		LinkedList<Polyomino> a = Polyomino.fixed(7);
+		Image2D frame= new Image2D(2000,100);
 		Image2dViewer test2 = new Image2dViewer(frame); 
-		Polyomino.displayPolyominos(a, frame,20, Color.black);
+		Polyomino.displayPolyominos(a, frame,10, Color.black);
 
 
 		
