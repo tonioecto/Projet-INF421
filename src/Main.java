@@ -62,10 +62,12 @@ public class Main {
 		
 	//	Polyomino a = new Polyomino("[(0,0), (0,1), (0,2)]");
 	//	a.addCase(new Case(-1,1))
-		LinkedList<Polyomino> a = Polyomino.fixed(7);
-		Image2D frame= new Image2D(2000,100);
+		int[] primes=Polyomino.initPrimes("Primes.txt",3000);
+		LinkedList<Polyomino> a = Polyomino.fixed(11,primes);
+		System.out.println(a.size());
+		Image2D frame= new Image2D(2000,200);
 		Image2dViewer test2 = new Image2dViewer(frame); 
-		Polyomino.displayPolyominos(a, frame,10, Color.black);
+		Polyomino.displayPolyominos(a, frame,20, Color.black,primes);
 
 
 		

@@ -12,11 +12,13 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 	int width;
 	int height;
 	int key;
+	int maxx;
+	int maxy;
 	int minx;
 	int miny;
-	final int[] primes = initPrimes("Primes.txt",3000); // Un calcul par instance ?
+	//final int[] primes = initPrimes("Primes.txt",3000); // Un calcul par instance ?
 
-	public Polyomino(String str){
+	public Polyomino(String str,int[] primes){
 		str=str.replace("[", "");
 		str=str.replace("]", "");
 		str=str.replace("(", "");
@@ -24,8 +26,8 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		str=str.replace(" ", "");
 		String[] coor = str.split(",");
 
-		width= Integer.MIN_VALUE;
-		height = Integer.MIN_VALUE;
+		maxx= Integer.MIN_VALUE;
+		maxy = Integer.MIN_VALUE;
 		minx=0;
 		miny=0;
 		key=1;
@@ -38,11 +40,13 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 			int a =Integer.parseInt(coor[i]);
 			int b= Integer.parseInt(coor[i+1]);
 			cases.add(new Case(a,b));
-			if(a>width) width=a;
-			if(b>height) height=b;
+			if(a>maxx) maxx=a;
+			if(b>maxy) maxy=b;
 		}
 		for (Case c:this.cases){miny=Math.min(miny, c.ordonnee);minx=Math.min(minx, c.abscisse);}
-		this.key=this.valKey();
+		height = maxy-miny+1;  
+		width = maxx-minx+1;
+		this.key=this.valKey( primes);
 	}
 
 	public static int[] initPrimes(String nameFile,int n){
@@ -95,13 +99,8 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		key=1;
 	}
 
-	public Case removeLast(){
-		Case c = this.cases.pop();
-		this.key/=primes[((c.abscisse+c.ordonnee)*(c.abscisse+c.ordonnee+1)/2+c.ordonnee)];
-		return c;
-	}
 
-	public void addCase(Case c){  // Pour les cases positives, avec la cl�, on pourrait s'assurer qu'on ne rajoute pas 2 fois la m�me case
+	public void addCase(Case c,int[] primes){  // Pour les cases positives, avec la cl�, on pourrait s'assurer qu'on ne rajoute pas 2 fois la m�me case
 //		if(c.abscisse<0 || c.ordonnee<0){
 //			this.translate(new int[] {-Math.min(0,c.abscisse),-Math.min(0,c.ordonnee)} );
 //			c.abscisse+=-Math.min(0,c.abscisse);
@@ -131,37 +130,39 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 
 		int a = c.abscisse;
 		int b = c.ordonnee;
-		if (size==1){this.minx=a;this.miny=b;}
+		if (size==1){this.minx=a;this.miny=b;this.maxx=a;this.maxy=b;}
 		else {
-			if(a<this.minx) this.minx=a;width++;
-			if(b<this.miny) this.miny=b;height++;
+			if(a<this.minx) this.minx=a;
+			if(b<this.miny) this.miny=b;
+			if(a>this.maxx) this.maxx=a;
+			if(b>this.maxy) this.maxy=b;
 		}
-		if(a>this.width) this.width=a;
-		if(b>this.height) this.height=b;
-
-		this.key=this.valKey();
+		
+		this.height = this.maxy-this.miny+1;  
+		this.width =this.maxx-this.minx+1;
+		this.key=this.valKey(primes);
 
 	}
 
-	public void translate(int[] coor){ // A test
+	public void translate(int[] coor,int[] primes){ // A test
 		this.key=1;
 		for(Case c: this.cases){
 			c.abscisse=c.abscisse+coor[0];
 			c.ordonnee=c.ordonnee+coor[1];
 		}
-		this.height+=coor[1];
-		this.width+=coor[0];
+		this.maxy+=coor[1];
+		this.maxx+=coor[0];
 		this.miny+=coor[1];
 		this.minx+=coor[0];
-		this.key=this.valKey();
+		this.key=this.valKey(primes);
 	}
 
-	public void rotate(boolean trigo){ // A test (bon ?)
+	public void rotate(boolean trigo,int[] primes){ // A test (bon ?)
 		this.key=1;
 		if(trigo){
 			for(Case c:this.cases){
 				int temp;
-				temp=-c.abscisse+this.width; // ?
+				temp=-c.abscisse+this.maxx; // ?
 				c.abscisse=c.ordonnee;
 				c.ordonnee=temp;
 			}
@@ -171,7 +172,7 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 			for(Case c:this.cases){
 				int temp;
 				temp=c.abscisse;
-				c.abscisse=-c.ordonnee+this.height; // ?
+				c.abscisse=-c.ordonnee+this.maxy; // ?
 				c.ordonnee=temp;
 			}
 		}
@@ -182,33 +183,34 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		temp=this.minx;
 		this.minx=this.miny;
 		this.miny=temp;
-		this.key=this.valKey();
+		temp=this.maxx;
+		this.maxx=this.maxy;
+		this.maxy=temp;
+		this.key=this.valKey(primes);
 
 	}
 
-	public Polyomino reflection(boolean vertical){
+	public Polyomino reflection(boolean vertical,int[] primes){
 		Polyomino poly = new Polyomino();
 
 		if(vertical){
 			for(Case c : this.cases){
-				poly.addCase(new Case(this.width-c.abscisse,c.ordonnee));
+				poly.addCase(new Case(this.maxx-c.abscisse,c.ordonnee),primes);
 			}
-
-			poly.height=this.height; // utile ?
-			poly.width=this.width;
-
 		}
 		else{
 			for(Case c : this.cases){
-				poly.addCase(new Case(c.abscisse,this.height-c.ordonnee));
-
+				poly.addCase(new Case(c.abscisse,this.maxy-c.ordonnee),primes);
 			}
-
-			poly.height=this.height; // utile ?
-			poly.width=this.width;
 		}
-		for (Case c:poly.cases){miny=Math.min(miny, c.ordonnee);minx=Math.min(minx, c.abscisse);}
-		poly.key=poly.valKey();
+		poly.minx=this.minx;
+		poly.miny=this.miny;
+		poly.maxx=this.maxx;
+		poly.maxy=this.maxy;
+		poly.height=this.height; // utile ?
+		poly.width=this.width;
+		//for (Case c:poly.cases){miny=Math.min(miny, c.ordonnee);minx=Math.min(minx, c.abscisse);}
+		poly.key=poly.valKey(primes);
 		return poly;
 		
 	}
@@ -219,7 +221,7 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 	// Dilatations
 	// Faire des fonctions qui renvoient des polyomino/statiques ?
 
-	static public LinkedList<Polyomino> Create(String file){
+	static public LinkedList<Polyomino> Create(String file,int[] primes){
 
 		LinkedList<Polyomino> liste = new LinkedList<Polyomino>();
 
@@ -236,7 +238,7 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		        while (line != null)
 		        {
 		            //System.out.println (line);
-		            liste.add(new Polyomino(line));
+		            liste.add(new Polyomino(line,primes));
 		            line = br.readLine();
 
 		        }
@@ -269,18 +271,21 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		}
 	}
 
-	public static void displayPolyominos(LinkedList<Polyomino>  poly, Image2D frame, int size, Color color){  // Rajouter une liste de couleur ?
+	public static void displayPolyominos(LinkedList<Polyomino>  poly, Image2D frame, int size, Color color,int[] primes){  // Rajouter une liste de couleur ?
 		int[] pointeur=new int[] {1,0};
 		for(Polyomino p:poly){
+			p.recentre(primes);
+			//p=p.reflection(false);
 			displayPolyomino(p,size,frame,color,pointeur);
-			pointeur[0]+=p.width+2;
+			//System.out.println(p.width);
+			pointeur[0]+=p.width+1;
 		}
 	}
 
-	public static void displayPolyominosSym(LinkedList<Polyomino>  poly, Image2D frame, int size, Color color){  // Rajouter une liste de couleur ?
+	public static void displayPolyominosSym(LinkedList<Polyomino>  poly, Image2D frame, int size, Color color,int[] primes){  // Rajouter une liste de couleur ?
 		int[] pointeur=new int[] {1,0};
 		for(Polyomino p:poly){
-			displayPolyomino(p.reflection(false),size,frame,color,pointeur);
+			displayPolyomino(p.reflection(false,primes),size,frame,color,pointeur);
 			pointeur[0]+=p.width+2;
 		}
 	}
@@ -290,22 +295,22 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 	}
 
 	
-	public boolean Contains(Case c){
+	public boolean Contains(Case c,int[] primes){
 		//il faut que la case soit bien positionnee par rapport au polyomino considere
 		if (c.abscisse>=minx && c.ordonnee>=miny){
-		return this.key%(this.primes[bijN(c.abscisse-minx,c.ordonnee-miny)])==0;}
+		return this.key%(primes[bijN(c.abscisse-minx,c.ordonnee-miny)])==0;}
 		else return false; 
 	}
 	
-	public Polyomino copy(){
+	public Polyomino copy(int[] primes){
 		Polyomino poly = new Polyomino();
 		for(Case c:this.cases){
-			poly.addCase(new Case(c.abscisse,c.ordonnee));
+			poly.addCase(new Case(c.abscisse,c.ordonnee),primes);
 		}
 		return poly;
 	}
 		
-	public int valKey(){
+	public int valKey(int[] primes){
 		int res=1;
 		for (Case c:this.cases){
 			int bij=bijN(c.abscisse-this.minx,c.ordonnee-this.miny);
@@ -314,9 +319,9 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		return res;
 
 	}
-	public void recentre(){
+	public void recentre(int[] primes){
 		for (Case c:this.cases){miny=Math.min(miny, c.ordonnee);minx=Math.min(minx, c.abscisse);}
-		this.translate(new int[] {-minx,-miny});
+		this.translate(new int[] {-minx,-miny},primes);
 	}
 
 	public boolean inFixedList(LinkedList<Polyomino> l){
@@ -325,113 +330,115 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		}
 		return false;
 	}
-	public static LinkedList<Polyomino> genFixed(int n){
+	public static LinkedList<Polyomino> genFixed(int n,int[] primes){
 		LinkedList<Polyomino> result= new LinkedList<Polyomino>();
-		if (n==1){Polyomino p=new Polyomino();p.addCase(new Case(0,0));result.add(p);}
+		if (n==1){Polyomino p=new Polyomino();p.addCase(new Case(0,0),primes);result.add(p);}
 		else{
-			LinkedList<Polyomino> stock=genFixed(n-1);
+			LinkedList<Polyomino> stock=genFixed(n-1,primes);
 			//result=genFixed(n-1);
 			for (Polyomino po:stock){
-				Polyomino p=po.copy();
+				Polyomino p=po.copy(primes);
 				
-				p.translate(new int[] {1,1} );
+				p.translate(new int[] {1,1},primes );
 				
 				for (Case c:p.cases){
 					Case c1=new Case(c.abscisse,c.ordonnee+1);
-					if (!p.Contains(c1)){
-						Polyomino p1=p.copy();
-						p1.addCase(c1);
-						if(!p1.inFixedList(result)){p1.recentre();result.add(p1);}
+					if (!p.Contains(c1,primes)){
+						Polyomino p1=p.copy(primes);
+						p1.addCase(c1,primes);
+						if(!p1.inFixedList(result)){p1.recentre(primes);result.add(p1);}
 					}
 					c1=new Case(c.abscisse,c.ordonnee-1);
-					if (!p.Contains(c1)){
-						Polyomino p4=p.copy();
-						p4.addCase(c1);
-						if(!p4.inFixedList(result)){p4.recentre();result.add(p4);}}
+					if (!p.Contains(c1,primes)){
+						Polyomino p4=p.copy(primes);
+						p4.addCase(c1,primes);
+						if(!p4.inFixedList(result)){p4.recentre(primes);result.add(p4);}}
 					c1=new Case(c.abscisse+1,c.ordonnee);
-					if (!p.Contains(c1)){
-						Polyomino p2=p.copy();
-						p2.addCase(c1);
-						if(!p2.inFixedList(result)){p2.recentre();result.add(p2);}
+					if (!p.Contains(c1,primes)){
+						Polyomino p2=p.copy(primes);
+						p2.addCase(c1,primes);
+						if(!p2.inFixedList(result)){p2.recentre(primes);result.add(p2);}
 					}
 					c1=new Case(c.abscisse-1,c.ordonnee);
-					if (!p.Contains(c1)){
-						Polyomino p3=p.copy();
-						p3.addCase(c1);
-						if(!p3.inFixedList(result)){p3.recentre();result.add(p3);} }
+					if (!p.Contains(c1,primes)){
+						Polyomino p3=p.copy(primes);
+						p3.addCase(c1,primes);
+						if(!p3.inFixedList(result)){p3.recentre(primes);result.add(p3);} }
 
 				}
-				p.recentre( );
+				p.recentre(primes );
 			}
 		}
 		return result;
 	}
-	public boolean inFreeList(LinkedList<Polyomino> l){
+	public boolean inFreeList(LinkedList<Polyomino> l,int[] primes){
 		for (Polyomino p:l){
-			if(equalsFree(this,p)){return true;}
+			if(equalsFree(this,p,primes)){return true;}
 		}
 		return false;
 	}
-	public boolean equalsFree(Polyomino a,Polyomino b){
+	public static boolean equalsFree(Polyomino a,Polyomino b,int[] primes){
 		if (equalsFixed(a,b)){return true;}
-		Polyomino p=b.copy();
-		p.rotate(true);
+		Polyomino p=b.copy(primes);
+		p.rotate(true,primes);
 		if (equalsFixed(a,p)){return true;}
-		p.rotate(true);
+		p.rotate(true,primes);
 		if (equalsFixed(a,p)){return true;}
-		p.rotate(true);
+		p.rotate(true,primes);
 		if (equalsFixed(a,p)){return true;}
-		Polyomino p1=b.copy();
-		if (equalsFixed(a,p1.reflection(true))){return true;}
-		if (equalsFixed(a,p1.reflection(false))){return true;}
-		Polyomino p2=b.copy();
-		p2.rotate(true);
-		if (equalsFixed(a,p2.reflection(true))){return true;}
-		if (equalsFixed(a,p2.reflection(false))){return true;}
+		Polyomino p1=b.copy(primes);
+		if (equalsFixed(a,p1.reflection(true,primes))){return true;}
+		if (equalsFixed(a,p1.reflection(false,primes))){return true;}
+		Polyomino p2=b.copy(primes);
+		p2.rotate(true,primes);
+		if (equalsFixed(a,p2.reflection(true,primes))){return true;}
+		if (equalsFixed(a,p2.reflection(false,primes))){return true;}
 		return false;
 	}
-	public static LinkedList<Polyomino> genFree(int n){
+	public static LinkedList<Polyomino> genFree(int n,int[] primes){
 		LinkedList<Polyomino> result= new LinkedList<Polyomino>();
-		if (n==1){Polyomino p=new Polyomino();p.addCase(new Case(0,0));result.add(p);}
+		if (n==1){Polyomino p=new Polyomino();p.addCase(new Case(0,0),primes);result.add(p);}
 		else{
-			LinkedList<Polyomino> stock=genFree(n-1);
+			LinkedList<Polyomino> stock=genFree(n-1,primes);
 			//result=genFixed(n-1);
 			for (Polyomino po:stock){
-				Polyomino p=po.copy();
+				Polyomino p=po.copy(primes);
 				
-				p.translate(new int[] {1,1} );
+				p.translate(new int[] {1,1},primes );
 				
 				for (Case c:p.cases){
 					Case c1=new Case(c.abscisse,c.ordonnee+1);
-					if (!p.Contains(c1)){
-						Polyomino p1=p.copy();
-						p1.addCase(c1);
-						if(!p1.inFreeList(result)){p1.recentre();result.add(p1);}
+					if (!p.Contains(c1,primes)){
+						Polyomino p1=p.copy(primes);
+						p1.addCase(c1,primes);
+						if(!p1.inFreeList(result,primes)){p1.recentre(primes);result.add(p1);}
 					}
 					c1=new Case(c.abscisse,c.ordonnee-1);
-					if (!p.Contains(c1)){
-						Polyomino p4=p.copy();
-						p4.addCase(c1);
-						if(!p4.inFreeList(result)){p4.recentre();result.add(p4);}}
+					if (!p.Contains(c1,primes)){
+						Polyomino p4=p.copy(primes);
+						p4.addCase(c1,primes);
+						if(!p4.inFreeList(result,primes)){p4.recentre(primes);result.add(p4);}}
 					c1=new Case(c.abscisse+1,c.ordonnee);
-					if (!p.Contains(c1)){
-						Polyomino p2=p.copy();
-						p2.addCase(c1);
-						if(!p2.inFreeList(result)){p2.recentre();result.add(p2);}
+					if (!p.Contains(c1,primes)){
+						Polyomino p2=p.copy(primes);
+						p2.addCase(c1,primes);
+						if(!p2.inFreeList(result,primes)){p2.recentre(primes);result.add(p2);}
 					}
 					c1=new Case(c.abscisse-1,c.ordonnee);
-					if (!p.Contains(c1)){
-						Polyomino p3=p.copy();
-						p3.addCase(c1);
-						if(!p3.inFreeList(result)){p3.recentre();result.add(p3);} }
+					if (!p.Contains(c1,primes)){
+						Polyomino p3=p.copy(primes);
+						p3.addCase(c1,primes);
+						if(!p3.inFreeList(result,primes)){p3.recentre(primes);result.add(p3);} }
 
 				}
-				p.recentre( );
+				p.recentre(primes );
 			}
 		}
-		System.out.print(result.size());
+		//System.out.print(result.size());
 		return result;
 	}
+	
+	//debut de la question 3
 	public static LinkedList<Polyomino> add(LinkedList<Polyomino> a,LinkedList<Polyomino> b){
 		for (Polyomino p:a){
 			b.add(p);
@@ -443,35 +450,29 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		for (Case c:b){a.add(new Case(c.abscisse,c.ordonnee));}
 		return a;
 	}
-	 
-	//debut de la question 3
-	public static LinkedList<Polyomino> fixed( int n){
-		int[][] table=new int[2*n+4][n+4];
-		for (int i=0;i<n;i++){table[i][0]=1;}
-		LinkedList<Case> ca=new LinkedList<Case>();
-		ca.add(new Case(0,0));
-		Polyomino p=new Polyomino();
-		LinkedList<Polyomino> a=interm(table,ca,p,n);
-		System.out.println(a.size());
-		return a;
-	}
 	public static int[][] copy(int[][] t,int n){
 		int [][] res= new int[2*n+4][n+4];
 		for (int i=0;i<2*n+4;i++){for (int j=0;j<n+4;j++){res[i][j]=t[i][j];}}
 		return res;
 	}
-	public static LinkedList<Polyomino> interm(int[][] tab, LinkedList<Case> st,Polyomino p,int n){
+	public static LinkedList<Polyomino> fixed( int n,int[] primes){
+		int[][] table=new int[2*n+4][n+4];
+		for (int i=0;i<n;i++){table[i][0]=1;}
+		LinkedList<Case> ca=new LinkedList<Case>();
+		ca.add(new Case(0,0));
+		Polyomino p=new Polyomino();
+		LinkedList<Polyomino> a=interm(table,ca,p,n,primes);
+		return a;
+	}
+
+	public static LinkedList<Polyomino> interm(int[][] tab, LinkedList<Case> st,Polyomino p,int n,int[] primes){
 		LinkedList<Polyomino> result=new LinkedList<Polyomino>();
-		//System.out.println(tab[n-1][1]);
 		if (!st.isEmpty()){
-			//Case c=st.removeLast();
 			Case c=st.pop();
-			
 			tab[c.abscisse+n][c.ordonnee]=1;
-			Polyomino p1=p.copy();
-			//if (c.ordonnee==1 && c.abscisse==-1){System.out.println(p1.size); }
-			p1.addCase(new Case(c.abscisse,c.ordonnee));
-			
+			Polyomino p1=p.copy(primes);
+			p1.addCase(new Case(c.abscisse,c.ordonnee),primes);
+			if (p1.size==n){result.add(p1);}
 			if (p1.size<n){
 				int compteur=0;
 				int [][] tabl=copy(tab,n);
@@ -481,99 +482,112 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 				if (c.abscisse+n+1<2*n+4 && c.ordonnee <n+4 &&tabl[c.abscisse+1+n][c.ordonnee]==0){sta.add(new Case(c.abscisse+1,c.ordonnee));compteur++;tabl[c.abscisse+n+1][c.ordonnee]=1;}
 				if (c.ordonnee-1>=0 && c.abscisse+n<2*n+4){if (tabl[c.abscisse+n][c.ordonnee-1]==0){sta.add(new Case(c.abscisse,c.ordonnee-1));compteur++;tabl[c.abscisse+n][c.ordonnee-1]=1;};}
 				if (c.abscisse-1+n<2*n+4 &&tabl[c.abscisse-1+n][c.ordonnee]==0){sta.add(new Case(c.abscisse-1,c.ordonnee));compteur++;tabl[c.abscisse+n-1][c.ordonnee]=1;}
-				
-				//LinkedList<Case> sta=copy(st);
-				//for (int i=0;i<compteur;i++){st.removeLast();}
-				result=add(result, interm(tabl,sta,p1,n));
+				result=add(result, interm(tabl,sta,p1,n,primes));
 				
 			}
-			//System.out.println(p1.size);
-			result=add(interm(tab,st,p,n),result);result.add(p1);}
+			result=add(interm(tab,st,p,n,primes),result);}
 		
 		return result;
 		
 	}
 	
-	
-	
-	
-	public static void enumFixed(int n){
-
-		Image2D frame = new Image2D(1000,1000);
-		Image2dViewer frameV = new Image2dViewer(frame);
-
-		LinkedList<Tuple> liste = new LinkedList<Tuple>();
-		Polyomino poly = new Polyomino();
-		LinkedList<Case> listeCase = new LinkedList<Case>();
-		listeCase.add(new Case(0,0));
-		Tuple tuple = new Tuple(poly,listeCase);
-		liste.add(tuple);
-
-		enumFixed(n,liste, new LinkedList<Integer>(), frame, frameV);
-	}
-
-	public static void enumFixed(int n, LinkedList<Tuple> liste, LinkedList<Integer> keys, Image2D frame, Image2dViewer frameV){
-		if(n==0) return;
-
-		LinkedList<Tuple> listef = new LinkedList<Tuple>();
-
-
-
-		for(Tuple tuple :liste){
-
-			for(Case c : tuple.listeCase){
-
-				Polyomino poly=tuple.poly.copy();
-				poly.addCase(c);
-
-				if(!keys.contains(poly.key)){
-
-					keys.add(poly.key);
-					System.out.println(poly.key);
-
-
-					frame.clear();
-					displayPolyomino(poly, 100, frame, Color.black, new int[] {0,0});
-
-
-					frameV.img2d.repaint();
-
-
-					try {
-						Thread.sleep(300);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					LinkedList<Case> L2 = (LinkedList<Case>) tuple.listeCase.clone();
-					L2.remove(c);
-
-					Case c2 = new Case(c.abscisse+1,c.ordonnee);
-					if(!poly.Contains(c2)) L2.add(c2);
-
-					c2= new Case(c.abscisse,c.ordonnee+1);
-					if(!poly.Contains(c2)) L2.add(c2);
-
-					c2= new Case(c.abscisse-1,c.ordonnee);
-					if(c2.abscisse<0) L2.add(c2);
-					else{
-						if(!poly.Contains(c2)) L2.add(c2);
-					}
-
-					c2= new Case(c.abscisse,c.ordonnee-1);
-					if(c2.ordonnee<0) L2.add(c2);
-					else{
-						if(!poly.Contains(c2)) L2.add(c2);
-					}
-
-
-					listef.add(new Tuple(poly,L2));
-
+	public static LinkedList<Polyomino> free(int n,int[] primes){
+		LinkedList<Polyomino> list= fixed(n,primes);
+		LinkedList<Polyomino> result=new LinkedList<Polyomino>();
+		for (Polyomino p:list){
+			p.recentre(primes);
+			if (result.isEmpty()){result.add(p);}
+			else {
+				boolean a=true;
+				for (Polyomino po:result){
+					if (equalsFree(po,p,primes)){a=false;}
 				}
+				if (a){result.add(p);}
 			}
 		}
-		System.out.println(keys.size());
-		enumFixed(n-1, listef,keys,frame, frameV);
+		return result;
 	}
+	
 }
+	
+	
+//	public static void enumFixed(int n){
+//
+//		Image2D frame = new Image2D(1000,1000);
+//		Image2dViewer frameV = new Image2dViewer(frame);
+//
+//		LinkedList<Tuple> liste = new LinkedList<Tuple>();
+//		Polyomino poly = new Polyomino();
+//		LinkedList<Case> listeCase = new LinkedList<Case>();
+//		listeCase.add(new Case(0,0));
+//		Tuple tuple = new Tuple(poly,listeCase);
+//		liste.add(tuple);
+//
+//		enumFixed(n,liste, new LinkedList<Integer>(), frame, frameV);
+//	}
+//
+//	public static void enumFixed(int n, LinkedList<Tuple> liste, LinkedList<Integer> keys, Image2D frame, Image2dViewer frameV){
+//		if(n==0) return;
+//
+//		LinkedList<Tuple> listef = new LinkedList<Tuple>();
+//
+//
+//
+//		for(Tuple tuple :liste){
+//
+//			for(Case c : tuple.listeCase){
+//
+//				Polyomino poly=tuple.poly.copy();
+//				poly.addCase(c);
+//
+//				if(!keys.contains(poly.key)){
+//
+//					keys.add(poly.key);
+//					System.out.println(poly.key);
+//
+//
+//					frame.clear();
+//					displayPolyomino(poly, 100, frame, Color.black, new int[] {0,0});
+//
+//
+//					frameV.img2d.repaint();
+//
+//
+//					try {
+//						Thread.sleep(300);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//
+//					LinkedList<Case> L2 = (LinkedList<Case>) tuple.listeCase.clone();
+//					L2.remove(c);
+//
+//					Case c2 = new Case(c.abscisse+1,c.ordonnee);
+//					if(!poly.Contains(c2)) L2.add(c2);
+//
+//					c2= new Case(c.abscisse,c.ordonnee+1);
+//					if(!poly.Contains(c2)) L2.add(c2);
+//
+//					c2= new Case(c.abscisse-1,c.ordonnee);
+//					if(c2.abscisse<0) L2.add(c2);
+//					else{
+//						if(!poly.Contains(c2)) L2.add(c2);
+//					}
+//
+//					c2= new Case(c.abscisse,c.ordonnee-1);
+//					if(c2.ordonnee<0) L2.add(c2);
+//					else{
+//						if(!poly.Contains(c2)) L2.add(c2);
+//					}
+//
+//
+//					listef.add(new Tuple(poly,L2));
+//
+//				}
+//			}
+//		}
+//		System.out.println(keys.size());
+//		enumFixed(n-1, listef,keys,frame, frameV);
+//	}
+//}

@@ -279,7 +279,7 @@ public class Polymino {
 		for(Polymino poly:liste2){
 			poly.translate(new int[] {curseur, 20});
 			curseur+=poly.width+20;
-			image.addPixel(poly.xCoords, poly.yCoords, Color.RED);
+			//image.addPixel(poly.xCoords, poly.yCoords, Color.RED);
 		}
 	}
 
