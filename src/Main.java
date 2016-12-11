@@ -62,13 +62,33 @@ public class Main {
 		
 	//	Polyomino a = new Polyomino("[(0,0), (0,1), (0,2)]");
 	//	a.addCase(new Case(-1,1))
-		int[] primes=Polyomino.initPrimes("Primes.txt",3000);
-		LinkedList<Polyomino> a = Polyomino.fixed(11,primes);
-		System.out.println(a.size());
-		Image2D frame= new Image2D(2000,200);
-		Image2dViewer test2 = new Image2dViewer(frame); 
-		Polyomino.displayPolyominos(a, frame,20, Color.black,primes);
-
+//		int[] primes=Polyomino.initPrimes("Primes.txt",3000);
+//		LinkedList<Polyomino> a = Polyomino.fixed(8,primes);
+//		System.out.println(a.size());
+//		Image2D frame= new Image2D(2000,200);
+//		Image2dViewer test2 = new Image2dViewer(frame); 
+//		Polyomino.displayPolyominos(a, frame,20, Color.black,primes);
+		LinkedList<Integer> a = new LinkedList<Integer>();
+		a.add(1);a.add(2);a.add(3);
+		LinkedList<Integer> b = new LinkedList<Integer>();
+		b.add(1);b.add(2);
+		LinkedList<Integer> c = new LinkedList<Integer>();
+		c.add(2);c.add(3);
+		LinkedList<Integer> d = new LinkedList<Integer>();
+		d.add(1);d.add(3);
+		LinkedList<Integer> e = new LinkedList<Integer>();
+		e.add(1);
+		LinkedList<Integer> f = new LinkedList<Integer>();
+		f.add(2);
+		LinkedList<Integer> g = new LinkedList<Integer>();
+		g.add(3);
+		LinkedList<LinkedList<Integer>> h=new LinkedList<LinkedList<Integer>>();
+		h.add(b);h.add(c);h.add(d);h.add(e);h.add(f);h.add(g);
+		int[][] m=new int[][] {{1,1,0},{0,1,1},{1,0,1},{1,0,0},{0,1,0},{0,0,1}};
+		LinkedList<LinkedList<LinkedList<Integer>>> k=Polyomino.exactCover(a, m, h);
+		for (LinkedList<LinkedList<Integer>> l:k){
+			System.out.println(l);
+		}
 
 		
 
