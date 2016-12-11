@@ -508,86 +508,76 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		return result;
 	}
 	
+
+	
+// Task 4
+	public static int[][] copy(int[][]m){
+		int[][] result= new int[m.length][m[0].length];
+		for (int i=0;i<m.length;i++){
+			for (int j=0;j<m[0].length;j++){
+				result[i][j]=m[i][j];
+			}
+		}
+		return result;
+		
+	}
+	public static LinkedList<Integer> copyInt(LinkedList<Integer> l){
+		LinkedList<Integer> result=new LinkedList<Integer>();
+		for (int j:l){
+			result.add(j);
+		}
+		return result;
+	}
+	public static LinkedList<LinkedList<Integer>> copyList(LinkedList<LinkedList<Integer>> l){
+		LinkedList<LinkedList<Integer>> result=new LinkedList<LinkedList<Integer>>();
+		for (LinkedList<Integer> i:l){
+			result.add(copyInt(i));
+		}
+		return result;
+	}
+
+	public static LinkedList<LinkedList<LinkedList<Integer>>> exactCover(LinkedList<Integer> a,int[][] m,LinkedList<LinkedList<Integer>> c){
+		if (a==null || a.size()==0){LinkedList<LinkedList<LinkedList<Integer>>> p=  new LinkedList<LinkedList<LinkedList<Integer>>>();p.add(new LinkedList<LinkedList<Integer>>());return p;}
+		else {
+			int x=a.getFirst();
+			LinkedList<LinkedList<LinkedList<Integer>>> p=new LinkedList<LinkedList<LinkedList<Integer>>>();
+			for (int i=0;i<m.length;i++){
+				LinkedList<Integer> s=new LinkedList<Integer>();
+				if (m[i][x-1]==1){
+					// for S, xeS
+					LinkedList<Integer> a1=copyInt(a);
+					LinkedList<LinkedList<Integer>> c1=copyList(c);
+					int[][] m1=copy(m);
+					for (int j=0;j<m[i].length;j++){
+						if (m[i][j]==1){
+							//for y , yeS
+							s.add(j+1);
+							Integer y=new Integer (j+1);
+							a1.remove(y);
+							for (int k=0;k<m.length;k++){
+								if (m[k][j]==1){
+									//for T, yeT
+									LinkedList<Integer> b=new LinkedList<Integer>();
+									for (int l=0;l<m[k].length;l++){
+										if (m[k][l]==1){
+											//for l, leT
+											b.add(l+1);
+											m1[k][l]=0;
+										}
+									}
+									c1.remove(b);
+								}
+							}
+							m1[i][j]=0;
+						}
+					}
+					for (LinkedList<LinkedList<Integer>> p1:exactCover(a1,m1,c1)){
+						p1.add(s);
+						p.add(p1);
+					}
+				}
+			}
+		return p;}
+	}
+
 }
-	
-	
-//	public static void enumFixed(int n){
-//
-//		Image2D frame = new Image2D(1000,1000);
-//		Image2dViewer frameV = new Image2dViewer(frame);
-//
-//		LinkedList<Tuple> liste = new LinkedList<Tuple>();
-//		Polyomino poly = new Polyomino();
-//		LinkedList<Case> listeCase = new LinkedList<Case>();
-//		listeCase.add(new Case(0,0));
-//		Tuple tuple = new Tuple(poly,listeCase);
-//		liste.add(tuple);
-//
-//		enumFixed(n,liste, new LinkedList<Integer>(), frame, frameV);
-//	}
-//
-//	public static void enumFixed(int n, LinkedList<Tuple> liste, LinkedList<Integer> keys, Image2D frame, Image2dViewer frameV){
-//		if(n==0) return;
-//
-//		LinkedList<Tuple> listef = new LinkedList<Tuple>();
-//
-//
-//
-//		for(Tuple tuple :liste){
-//
-//			for(Case c : tuple.listeCase){
-//
-//				Polyomino poly=tuple.poly.copy();
-//				poly.addCase(c);
-//
-//				if(!keys.contains(poly.key)){
-//
-//					keys.add(poly.key);
-//					System.out.println(poly.key);
-//
-//
-//					frame.clear();
-//					displayPolyomino(poly, 100, frame, Color.black, new int[] {0,0});
-//
-//
-//					frameV.img2d.repaint();
-//
-//
-//					try {
-//						Thread.sleep(300);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//
-//					LinkedList<Case> L2 = (LinkedList<Case>) tuple.listeCase.clone();
-//					L2.remove(c);
-//
-//					Case c2 = new Case(c.abscisse+1,c.ordonnee);
-//					if(!poly.Contains(c2)) L2.add(c2);
-//
-//					c2= new Case(c.abscisse,c.ordonnee+1);
-//					if(!poly.Contains(c2)) L2.add(c2);
-//
-//					c2= new Case(c.abscisse-1,c.ordonnee);
-//					if(c2.abscisse<0) L2.add(c2);
-//					else{
-//						if(!poly.Contains(c2)) L2.add(c2);
-//					}
-//
-//					c2= new Case(c.abscisse,c.ordonnee-1);
-//					if(c2.ordonnee<0) L2.add(c2);
-//					else{
-//						if(!poly.Contains(c2)) L2.add(c2);
-//					}
-//
-//
-//					listef.add(new Tuple(poly,L2));
-//
-//				}
-//			}
-//		}
-//		System.out.println(keys.size());
-//		enumFixed(n-1, listef,keys,frame, frameV);
-//	}
-//}
