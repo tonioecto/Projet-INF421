@@ -89,6 +89,11 @@ public class Main {
 		for (LinkedList<LinkedList<Integer>> l:k){
 			System.out.println(l);
 		}
+		
+		//System.out.print((char) 65);
+		
+		int[][] M = new int[][] {{1,0,1},{0,0,1},{0,1,0}};
+		DancingLinks.init(M);
 
 		
 
