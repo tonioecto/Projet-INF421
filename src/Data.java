@@ -2,10 +2,10 @@
 public class Data {
 	Data U,D,L,R;
 	Data C;
-	String N;
+	Integer N;
 	int S;
 	
-	public Data(String name){
+	public Data(Integer name){
 		this.N=name;
 		this.S=0;
 		this.U=this;

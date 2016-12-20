@@ -85,15 +85,19 @@ public class Main {
 		LinkedList<LinkedList<Integer>> h=new LinkedList<LinkedList<Integer>>();
 		h.add(b);h.add(c);h.add(d);h.add(e);h.add(f);h.add(g);
 		int[][] m=new int[][] {{1,1,0},{0,1,1},{1,0,1},{1,0,0},{0,1,0},{0,0,1}};
-		LinkedList<LinkedList<LinkedList<Integer>>> k=Polyomino.exactCover(a, m, h);
-		for (LinkedList<LinkedList<Integer>> l:k){
-			System.out.println(l);
-		}
+//		LinkedList<LinkedList<LinkedList<Integer>>> k=Polyomino.exactCover(a, m, h);
+//		for (LinkedList<LinkedList<Integer>> l:k){
+//			System.out.println(l);
+//		}
 		
 		//System.out.print((char) 65);
 		
-		int[][] M = new int[][] {{1,0,1},{0,0,1},{0,1,0}};
-		DancingLinks.init(M);
+		//int[][] M = new int[][] {{1,0,1},{0,0,1},{0,1,0}};
+		
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(m));
+		for (LinkedList<LinkedList<Integer>> l:k){
+			System.out.println(l);
+		}
 
 		
 
