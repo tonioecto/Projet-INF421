@@ -72,13 +72,15 @@ public class DancingLinks {
 	}
 	
 	public static void coverColumn(Data x){
+		//System.out.println(x.N);
+		x=x.C;
 		x.R.L=x.L;
 		x.L.R=x.R;
 		Data t=x.D;
 		while (t!=x){
 			Data y=t.R;
 			while (y!=t){
-				System.out.println("b");
+				//System.out.println("b");
 				y.D.U=y.U;
 				y.U.D=y.D;
 				y.C.S=y.C.S-1;
@@ -87,8 +89,11 @@ public class DancingLinks {
 		
 			t=t.D;
 		}
+		//System.out.println("fin");
 	}
 	public static void uncoverColumn(Data x){
+		//System.out.println(x.N);
+		x=x.C;
 		x.R.L=x;
 		x.L.R=x;
 		Data t=x.U;
@@ -115,7 +120,7 @@ public class DancingLinks {
 				z=z.R;
 				i++;
 			}
-			System.out.println(i);
+			//System.out.println(i);
 			coverColumn(x);
 			if (h.R==h){return p;}
 			else {
@@ -135,10 +140,10 @@ public class DancingLinks {
 						p1.add(s);
 						p.add(p1);
 					}
-					Data k=t.L;
+					Data k=t.R;
 					while (k!=t){
 						uncoverColumn(k);
-						k=k.L;
+						k=k.R;
 					}
 					t=t.U;
 				}
@@ -147,4 +152,3 @@ public class DancingLinks {
 			}
 	}
 }
-

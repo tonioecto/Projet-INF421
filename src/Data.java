@@ -5,6 +5,8 @@ public class Data {
 	Integer N;
 	int S;
 	
+	int i,j;
+	
 	public Data(Integer name){
 		this.N=name;
 		this.S=0;
