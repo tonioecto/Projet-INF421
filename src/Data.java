@@ -12,6 +12,7 @@ public class Data {
 		this.D=this;
 		this.R=this;
 		this.L=this;
+		this.C=this;
 	}
 	
 	public Data(){
@@ -19,5 +20,6 @@ public class Data {
 		this.D=this;
 		this.R=this;
 		this.L=this;
+		this.C=this;
 	}
 }

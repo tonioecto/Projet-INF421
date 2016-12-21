@@ -78,11 +78,13 @@ public class DancingLinks {
 		while (t!=x){
 			Data y=t.R;
 			while (y!=t){
+				System.out.println("b");
 				y.D.U=y.U;
 				y.U.D=y.D;
 				y.C.S=y.C.S-1;
 				y=y.R;
 			}
+		
 			t=t.D;
 		}
 	}
@@ -119,11 +121,11 @@ public class DancingLinks {
 			else {
 				Data t=x.U;
 				while (t!=x){
-					System.out.println("b");
 					LinkedList<Integer> s=new LinkedList<Integer>();
 					s.add(t.C.N);
 					Data y=t.L;
 					while (y!=t){
+						
 						s.add(y.C.N);
 						coverColumn(y);
 						y=y.L;
@@ -138,7 +140,7 @@ public class DancingLinks {
 						uncoverColumn(k);
 						k=k.L;
 					}
-
+					t=t.U;
 				}
 		
 				return p;}
