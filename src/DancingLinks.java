@@ -50,7 +50,9 @@ public class DancingLinks {
 						data.R=temp;
 						temp.L=data;
 						vertical[i]=data;
+						//System.out.println("blah");
 					}
+					//System.out.println(data.L.N);
 				}
 				column=column.R;
 			}
@@ -86,7 +88,6 @@ public class DancingLinks {
 				y.C.S=y.C.S-1;
 				y=y.R;
 			}
-		
 			t=t.D;
 		}
 		//System.out.println("fin");
@@ -140,6 +141,7 @@ public class DancingLinks {
 						p1.add(s);
 						p.add(p1);
 					}
+					//x=t.C;
 					Data k=t.R;
 					while (k!=t){
 						uncoverColumn(k);
@@ -147,6 +149,7 @@ public class DancingLinks {
 					}
 					t=t.U;
 				}
+				uncoverColumn(x);
 		
 				return p;}
 			}

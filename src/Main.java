@@ -1,11 +1,18 @@
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		//Polyomino poly = new Polyomino("[(0,0), (0,2),(1,1),(1,0),(1,2),(2,1)]");
+//		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+//		Polyomino poly = new Polyomino("[(0,0), (0,2),(1,1),(1,0),(1,2),(2,1)]",primes);
+//		System.out.println(poly.width);
+//		System.out.println(poly.height);
+//		
+//		int[][] M = Cover.convert(poly);
+//		System.out.println(M[0][1]);
 	//LinkedList<Polyomino> liste = Polyomino.Create("test.txt");
 //		
 //		Polyomino poly = liste.pop();
@@ -92,9 +99,8 @@ public class Main {
 		
 		//System.out.print((char) 65);
 		
-		int[][] M = new int[][] {{0,0,1,0,1,1,0},{1,0,0,1,0,0,1},{0,1,1,0,0,1,0},{1,0,0,1,0,0,0},{0,1,0,0,0,0,1},{0,0,0,1,1,0,1},{1,1,1,1,1,1,1}};
-		//int[][] M = new int[][] {{1,0,1},{0,0,1},{0,1,0}};
-		Data H= DancingLinks.init(M);
+
+		//Data H= DancingLinks.init(M);
 //		H=H.L.D.D.L.D;
 //		System.out.println(H.N);
 //		H=H.D;
@@ -102,11 +108,8 @@ public class Main {
 //			System.out.println(H);
 //			H=H.L;
 //		}
-		
-		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
-		for (LinkedList<LinkedList<Integer>> l:k){
-			System.out.println(l);
-		}
+//		
+
 		
 //		H=H.R.R;
 //		DancingLinks.coverColumn(H);
@@ -115,9 +118,49 @@ public class Main {
 //		H=H.R;
 //		DancingLinks.coverColumn(H);
 
-		
+		test999();
 
 		
+	}
+	
+	public static void test81(){
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(0,0), (0,2),(1,1),(1,0),(1,2),(2,1)]",primes);
+		
+		Polyomino p = new Polyomino("[(0,0)]",primes);
+		LinkedList<Polyomino> L = new LinkedList<Polyomino>();
+		L.add(p);
+		
+		int[][] M =Cover.toExactCover(L, poly);
+		
+		System.out.println(Arrays.deepToString(M));
+		
+		System.out.println("ok");
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		for (LinkedList<LinkedList<Integer>> l:k){
+			System.out.println(l);
+		}
+
+
+	}
+	
+	public static void test999(){
+		int[][] M = new int[][] {{0,0,1,0,1,1,0},{1,0,0,1,0,0,1},{0,1,1,0,0,1,0},{1,0,0,1,0,0,0},{0,1,0,0,0,0,1},{0,0,0,1,1,0,1},{1,1,1,1,1,1,1}};
+		//int[][] M = new int[][] {{0,0,1},{0,1,0},{1,0,1}};
+		System.out.println(Arrays.deepToString(M));
+		
+		Data H = DancingLinks.init(M);
+		
+		//System.out.println(H.R.D);
+		//System.out.println(H.R.D.L.L);
+
+
+		
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		for (LinkedList<LinkedList<Integer>> l:k){
+			System.out.println(l);
+		}
 	}
 	
 	
