@@ -1,12 +1,13 @@
+import java.util.LinkedList;
 
 public class DancingLinks {
 	static public Data init(int[][] M){
 		int i=0;
-		Data current = new Data((Character.toString((char) (i+65))));
+		Data current = new Data(i);
 		Data[] last = new Data[M[0].length];
 		last[i] = current;
 		for(i=1; i<M[0].length; i++){
-			Data nouv = new Data((Character.toString((char) (i+65))));
+			Data nouv = new Data(i);
 			Data temp = current.R;
 			current.R=nouv;
 			nouv.L=current;
@@ -16,7 +17,7 @@ public class DancingLinks {
 			last[i]=current;
 		}
 		
-		Data fin = new Data((Character.toString((char) (i+65)))); 
+		Data fin = new Data(i); 
 
 		current=current.R;
 
@@ -36,6 +37,7 @@ public class DancingLinks {
 					data.D=temp;
 					temp.U=data;
 					last[j]=data;
+					
 					
 					
 					if(vertical[i]==null){
@@ -65,7 +67,88 @@ public class DancingLinks {
 //		System.out.println(current.N);
 //		current=current.R;
 //	}
-		
+	
 		return current.L;  // return H
+	}
+	
+	public static void coverColumn(Data x){
+		//System.out.println(x.N);
+		x=x.C;
+		x.R.L=x.L;
+		x.L.R=x.R;
+		Data t=x.D;
+		while (t!=x){
+			Data y=t.R;
+			while (y!=t){
+				//System.out.println("b");
+				y.D.U=y.U;
+				y.U.D=y.D;
+				y.C.S=y.C.S-1;
+				y=y.R;
+			}
+		
+			t=t.D;
+		}
+		//System.out.println("fin");
+	}
+	public static void uncoverColumn(Data x){
+		//System.out.println(x.N);
+		x=x.C;
+		x.R.L=x;
+		x.L.R=x;
+		Data t=x.U;
+		while (t!=x){
+			Data y=t.L;
+			while (y!=t){
+				y.D.U=y;
+				y.U.D=y;
+				y.C.S=y.C.S+1;
+				y=y.L;
+			}
+			t=t.U;
+		}
+	}
+	public static LinkedList<LinkedList<LinkedList<Integer>>> exactCover(Data h){
+		if (h.R==h){LinkedList<LinkedList<LinkedList<Integer>>> p=  new LinkedList<LinkedList<LinkedList<Integer>>>();p.add(new LinkedList<LinkedList<Integer>>());return p;}
+		else{
+			LinkedList<LinkedList<LinkedList<Integer>>> p=new LinkedList<LinkedList<LinkedList<Integer>>>();
+			Data x=h.R;
+			Data z=x.R;
+			int i=0;
+			while (z!=h){
+				if (z.S<x.S){x=z;}
+				z=z.R;
+				i++;
+			}
+			//System.out.println(i);
+			coverColumn(x);
+			if (h.R==h){return p;}
+			else {
+				Data t=x.U;
+				while (t!=x){
+					LinkedList<Integer> s=new LinkedList<Integer>();
+					s.add(t.C.N);
+					Data y=t.L;
+					while (y!=t){
+						
+						s.add(y.C.N);
+						coverColumn(y);
+						y=y.L;
+					}
+				
+					for (LinkedList<LinkedList<Integer>> p1:exactCover(h)){
+						p1.add(s);
+						p.add(p1);
+					}
+					Data k=t.R;
+					while (k!=t){
+						uncoverColumn(k);
+						k=k.R;
+					}
+					t=t.U;
+				}
+		
+				return p;}
+			}
 	}
 }

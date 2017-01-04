@@ -85,15 +85,35 @@ public class Main {
 		LinkedList<LinkedList<Integer>> h=new LinkedList<LinkedList<Integer>>();
 		h.add(b);h.add(c);h.add(d);h.add(e);h.add(f);h.add(g);
 		int[][] m=new int[][] {{1,1,0},{0,1,1},{1,0,1},{1,0,0},{0,1,0},{0,0,1}};
-		LinkedList<LinkedList<LinkedList<Integer>>> k=Polyomino.exactCover(a, m, h);
+//		LinkedList<LinkedList<LinkedList<Integer>>> k=Polyomino.exactCover(a, m, h);
+//		for (LinkedList<LinkedList<Integer>> l:k){
+//			System.out.println(l);
+//		}
+		
+		//System.out.print((char) 65);
+		
+		int[][] M = new int[][] {{0,0,1,0,1,1,0},{1,0,0,1,0,0,1},{0,1,1,0,0,1,0},{1,0,0,1,0,0,0},{0,1,0,0,0,0,1},{0,0,0,1,1,0,1},{1,1,1,1,1,1,1}};
+		//int[][] M = new int[][] {{1,0,1},{0,0,1},{0,1,0}};
+		Data H= DancingLinks.init(M);
+//		H=H.L.D.D.L.D;
+//		System.out.println(H.N);
+//		H=H.D;
+//		for(int i=0; i<10; i++){
+//			System.out.println(H);
+//			H=H.L;
+//		}
+		
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
 		for (LinkedList<LinkedList<Integer>> l:k){
 			System.out.println(l);
 		}
 		
-		//System.out.print((char) 65);
-		
-		int[][] M = new int[][] {{1,0,1},{0,0,1},{0,1,0}};
-		DancingLinks.init(M);
+//		H=H.R.R;
+//		DancingLinks.coverColumn(H);
+//		H=H.D;
+//		DancingLinks.coverColumn(H);
+//		H=H.R;
+//		DancingLinks.coverColumn(H);
 
 		
 
