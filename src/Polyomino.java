@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Stack;
 public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
@@ -266,8 +268,60 @@ public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
 	}
 
 	public static void displayPolyomino(Polyomino p, int size, Image2D frame, Color color, int[] origin){
+		HashMap<Integer,Edge> M = new HashMap<Integer,Edge>();
 		for(Case c : p.cases){
 			frame.addCase((origin[0]+c.abscisse)*size,(origin[1]+c.ordonnee)*size,color,size);
+			//System.out.println(c.abscisse+"   "+c.ordonnee);
+			
+			// PB de dépassemment de integer
+			
+			Edge e1 = new Edge((origin[0]+c.abscisse),(origin[1]+c.ordonnee),(origin[0]+c.abscisse+1),(origin[1]+c.ordonnee),2,Color.WHITE);
+			Edge e2 = new Edge((origin[0]+c.abscisse),(origin[1]+c.ordonnee),(origin[0]+c.abscisse),(origin[1]+c.ordonnee+1),2,Color.WHITE);
+			Edge e3 = new Edge((origin[0]+c.abscisse+1),(origin[1]+c.ordonnee),(origin[0]+c.abscisse+1),(origin[1]+c.ordonnee+1),2,Color.WHITE);
+			Edge e4 = new Edge((origin[0]+c.abscisse),(origin[1]+c.ordonnee+1),(origin[0]+c.abscisse+1),(origin[1]+c.ordonnee+1),2,Color.WHITE);
+			
+			if(M.containsKey(e1.hashCode())){
+				M.get(e1.hashCode()).setColor(Color.RED);
+				//System.out.println("ok1");
+			}
+			
+			else{
+				M.put(e1.hashCode(), e1);
+				
+			}
+			//System.out.println(e1.hashCode());
+			//System.out.println(e3.hashCode());
+			
+			if(M.containsKey(e2.hashCode())){
+				M.get(e2.hashCode()).setColor(Color.RED);
+				//System.out.println("ok2");
+			}
+			else{
+				M.put(e2.hashCode(), e2);
+			}
+			
+			if(M.containsKey(e3.hashCode())){
+				M.get(e3.hashCode()).setColor(Color.RED);
+				//System.out.println("ok3");
+			}
+			else{
+				M.put(e3.hashCode(), e3);
+			}
+			
+			if(M.containsKey(e4.hashCode())){
+				M.get(e4.hashCode()).setColor(Color.RED);
+				//System.out.println("ok4");
+			}
+			else{
+				M.put(e4.hashCode(), e4);
+			}
+
+			
+			
+		}
+		
+		for(Edge e:M.values()){
+			frame.addEdge(new Edge(e.x1*size,e.y1*size,e.x2*size,e.y2*size,e.width,e.color));
 		}
 	}
 

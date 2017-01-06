@@ -294,6 +294,18 @@ public class Main {
 		
 	}
 	
+	public static void test6(){ // Affichage
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(0,0), (0,1)]",primes);
+		
+		Image2D frame= new Image2D(1000,1000);
+		Image2dViewer test2 = new Image2dViewer(frame);
+		Polyomino.displayPolyomino(poly, 100, frame, Color.black, new int[] {0,0});
+		
+	}
+	
 	public static void test(int[] l2, int[] l){
 		System.out.println();
 	}

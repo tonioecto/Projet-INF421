@@ -116,7 +116,7 @@ public class Cover {  // Tout est centré ?
 	public static Polyomino toPolyomino(LinkedList<Integer> L, int[] primes, int[][] origin){
 		Polyomino poly = new Polyomino();
 		for(int i:L){
-			System.out.println(i);
+			//System.out.println(i);
 			if(i<origin.length)
 			poly.addCase(new Case(origin[i][0],origin[i][1]), primes);
 		}
