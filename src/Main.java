@@ -92,8 +92,9 @@ public class Main {
 		LinkedList<LinkedList<Integer>> h=new LinkedList<LinkedList<Integer>>();
 		h.add(b);h.add(c);h.add(d);h.add(e);h.add(f);h.add(g);
 		int[][] m=new int[][] {{1,1,0},{0,1,1},{1,0,1},{1,0,0},{0,1,0},{0,0,1}};
-//		LinkedList<LinkedList<LinkedList<Integer>>> k=Polyomino.exactCover(a, m, h);
-//		for (LinkedList<LinkedList<Integer>> l:k){
+		LinkedList<LinkedList<LinkedList<Integer>>> k=Polyomino.exactCover(a, m, h);
+		LinkedList<LinkedList<LinkedList<Integer>>> k1=DancingLinks.exactCover(DancingLinks.init(m));
+//		for (LinkedList<LinkedList<Integer>> l:k1){
 //			System.out.println(l);
 //		}
 		
@@ -118,7 +119,7 @@ public class Main {
 //		H=H.R;
 //		DancingLinks.coverColumn(H);
 
-		test999();
+		test4();
 
 		
 	}
@@ -146,8 +147,8 @@ public class Main {
 	}
 	
 	public static void test999(){
-		int[][] M = new int[][] {{0,0,1,0,1,1,0},{1,0,0,1,0,0,1},{0,1,1,0,0,1,0},{1,0,0,1,0,0,0},{0,1,0,0,0,0,1},{0,0,0,1,1,0,1},{1,1,1,1,1,1,1}};
-		//int[][] M = new int[][] {{0,0,1},{0,1,0},{1,0,1}};
+		//int[][] M = new int[][] {{0,0,1,0,1,1,0},{1,0,0,1,0,0,1},{0,1,1,0,0,1,0},{1,0,0,1,0,0,0},{0,1,0,0,0,0,1},{0,0,0,1,1,0,1},{1,1,1,1,1,1,1}};
+		int[][] M = new int[][] {{0,0,1},{0,1,0},{1,0,1}};
 		System.out.println(Arrays.deepToString(M));
 		
 		Data H = DancingLinks.init(M);
@@ -158,6 +159,90 @@ public class Main {
 
 		
 		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		for (LinkedList<LinkedList<Integer>> l:k){
+			System.out.println(l);
+		}
+	}
+	public static void test1(){
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(0,0), (0,2),(1,1),(1,0),(1,2),(2,1),(2,0),(2,2),(0,1)]",primes);
+		
+		Polyomino p = new Polyomino("[(0,0),(0,1),(0,2)]",primes);
+		LinkedList<Polyomino> L = new LinkedList<Polyomino>();
+		L.add(p);
+		
+		int[][] M =Cover.toExactCover(L, poly);
+		
+		System.out.println(Arrays.deepToString(M));
+		
+		System.out.println("ok");
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		for (LinkedList<LinkedList<Integer>> l:k){
+			System.out.println(l);
+		}
+	}
+	public static void test2(){
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(0,0), (0,2),(1,1),(1,0),(1,2),(2,1),(2,0),(2,2),(0,1)]",primes);
+		Polyomino p2 = new Polyomino("[(0,0),(0,1),(0,2)]",primes);
+		Polyomino p3 = new Polyomino("[(0,0),(1,0),(2,0)]",primes);
+		Polyomino p = new Polyomino("[(0,0),(0,1)]",primes);
+		Polyomino p1 = new Polyomino("[(0,0),(1,0)]",primes);
+		LinkedList<Polyomino> L = new LinkedList<Polyomino>();
+		L.add(p);
+		L.add(p1);
+		L.add(p2);
+		L.add(p3);
+		int[][] M =Cover.toExactCover(L, poly);
+		System.out.println(Arrays.deepToString(M));
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		System.out.println(k.size());
+		for (LinkedList<LinkedList<Integer>> l:k){
+			System.out.println(l);
+		}
+	}
+	public static void test3(){
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(0,0),(1,1),(1,0),(0,1)]",primes);
+		Polyomino p2 = new Polyomino("[(0,0),(0,1),(0,2)]",primes);
+		Polyomino p3 = new Polyomino("[(0,0),(1,0),(2,0)]",primes);
+		Polyomino p = new Polyomino("[(0,0),(0,1)]",primes);
+		Polyomino p1 = new Polyomino("[(0,0),(1,0)]",primes);
+		LinkedList<Polyomino> L = new LinkedList<Polyomino>();
+		L.add(p);
+		L.add(p1);
+		L.add(p2);
+		L.add(p3);
+		int[][] M =Cover.toExactCover(L, poly);
+		System.out.println(Arrays.deepToString(M));
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		System.out.println(k.size());
+		for (LinkedList<LinkedList<Integer>> l:k){
+			System.out.println(l);
+		}
+	}
+	public static void test4(){
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(0,0), (0,2),(1,1),(1,0),(1,2),(0,1)]",primes);
+		Polyomino p2 = new Polyomino("[(0,0),(0,1),(0,2)]",primes);
+		Polyomino p3 = new Polyomino("[(0,0),(1,0),(2,0)]",primes);
+		Polyomino p = new Polyomino("[(0,0),(0,1)]",primes);
+		Polyomino p1 = new Polyomino("[(0,0),(1,0)]",primes);
+		LinkedList<Polyomino> L = new LinkedList<Polyomino>();
+		L.add(p);
+		L.add(p1);
+		L.add(p2);
+		L.add(p3);
+		System.out.println(poly.height+"  "+poly.width);
+		int[][] M =Cover.toExactCover(L, poly);
+		System.out.println(Arrays.deepToString(M));
+		
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		System.out.println(k.size());
 		for (LinkedList<LinkedList<Integer>> l:k){
 			System.out.println(l);
 		}

@@ -121,10 +121,10 @@ public class DancingLinks {
 				z=z.R;
 				i++;
 			}
-			//System.out.println(i);
+			//if (x==h){System.out.println("bonjour");}
 			coverColumn(x);
-			if (h.R==h){return p;}
-			else {
+			//if (h.R==h){System.out.println("bonjour");return p;}
+			//else {
 				Data t=x.U;
 				while (t!=x){
 					LinkedList<Integer> s=new LinkedList<Integer>();
@@ -136,8 +136,9 @@ public class DancingLinks {
 						coverColumn(y);
 						y=y.L;
 					}
-				
-					for (LinkedList<LinkedList<Integer>> p1:exactCover(h)){
+					LinkedList<LinkedList<LinkedList<Integer>>> p2=exactCover(h);
+					//System.out.println(p2.size());
+					for (LinkedList<LinkedList<Integer>> p1:p2){
 						p1.add(s);
 						p.add(p1);
 					}
@@ -151,7 +152,7 @@ public class DancingLinks {
 				}
 				uncoverColumn(x);
 		
-				return p;}
+				return p;
 			}
 	}
 }

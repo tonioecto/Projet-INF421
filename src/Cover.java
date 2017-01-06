@@ -35,8 +35,8 @@ public class Cover {  // Tout est centré ?
 		LinkedList<int[]> L = new LinkedList<int[]>();
 		
 		for(Polyomino p : poly){
-			for(int i = 0; i<=M[0].length-p.width; i++){
-				for(int j=0; j<=M.length-p.height; j++){
+			for(int i = 0; i<=M.length-p.width; i++){
+				for(int j=0; j<=M[0].length-p.height; j++){
 					
 					int[] l=(place(p,M,i,j,size));
 					if(l!=null) L.add(l);
