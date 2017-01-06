@@ -119,7 +119,7 @@ public class Main {
 //		H=H.R;
 //		DancingLinks.coverColumn(H);
 
-		test5();
+		test4();
 
 		
 	}
@@ -239,22 +239,31 @@ public class Main {
 		Polyomino p2 = new Polyomino("[(0,0),(0,1),(0,2)]",primes);
 		Polyomino p3 = new Polyomino("[(0,0),(1,0),(2,0)]",primes);
 		Polyomino p = new Polyomino("[(0,0),(0,1)]",primes);
-		Polyomino p1 = new Polyomino("[(0,0),(1,0)]",primes);
+		//Polyomino p1 = new Polyomino("[(0,0),(1,0)]",primes);
 		LinkedList<Polyomino> L = new LinkedList<Polyomino>();
 		L.add(p);
-		L.add(p1);
+		//L.add(p1);
 		L.add(p2);
 		L.add(p3);
-		System.out.println(poly.height+"  "+poly.width);
+		//System.out.println(poly.height+"  "+poly.width);
 		int[][] origin = new int[poly.cases.size()][2];
 		
-		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin);
+		int[][] M =Cover.toExactCover(L, poly,origin);
 		System.out.println(Arrays.deepToString(M));
 		
 		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
-		System.out.println(k.size());
+		//System.out.println(k.size());
 		for (LinkedList<LinkedList<Integer>> l:k){
 			System.out.println(l);
+		}
+		
+		Image2D frame= new Image2D(1000,1000);
+		Image2dViewer test2 = new Image2dViewer(frame);  
+		
+		for (LinkedList<LinkedList<Integer>> l:k){
+			for(LinkedList<Integer> m:l){
+				Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), 100, frame, Color.black, new int[] {0,0});
+			}
 		}
 	}
 	
