@@ -1,5 +1,5 @@
 
-public class Data {
+public class Data {   // L'objet Data utilisé pour la structure de Dancing Links
 	Data U,D,L,R;
 	Data C;
 	Integer N;

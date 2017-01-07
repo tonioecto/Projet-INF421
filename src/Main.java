@@ -99,7 +99,8 @@ public class Main {
 
 
 
-		expandNK(8,4);
+		//expandNK(8,4);
+		fixed(7);
 		
 
 		
@@ -107,8 +108,17 @@ public class Main {
 	
 	public static void fixed(int n){
 		int[] primes=Polyomino.initPrimes("Primes.txt",3000);
-		LinkedList<Polyomino> a = Polyomino.genFixed(n,primes);
-		System.out.println(a.size());
+		LinkedList<Polyomino> a = Polyomino.fixed(n,primes);
+		//System.out.println(a.size());
+		Image2D frame= new Image2D(2000,200);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		Polyomino.displayPolyominos(a, frame,20, Color.black,primes);
+	}
+	
+	public static void free(int n){
+		int[] primes=Polyomino.initPrimes("Primes.txt",3000);
+		LinkedList<Polyomino> a = Polyomino.free(n,primes);
+		//System.out.println(a.size());
 		Image2D frame= new Image2D(2000,200);
 		Image2dViewer test2 = new Image2dViewer(frame); 
 		Polyomino.displayPolyominos(a, frame,20, Color.black,primes);
@@ -138,9 +148,9 @@ public class Main {
 		
 		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin,primes);
 		
-		System.out.println(Arrays.deepToString(M));
+		//System.out.println(Arrays.deepToString(M));
 		
-		System.out.println("ok");
+		//System.out.println("ok");
 		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
 		for (LinkedList<LinkedList<Integer>> l:k){
 			System.out.println(l);
@@ -152,7 +162,7 @@ public class Main {
 	public static void test999(){
 		//int[][] M = new int[][] {{0,0,1,0,1,1,0},{1,0,0,1,0,0,1},{0,1,1,0,0,1,0},{1,0,0,1,0,0,0},{0,1,0,0,0,0,1},{0,0,0,1,1,0,1},{1,1,1,1,1,1,1}};
 		int[][] M = new int[][] {{0,0,1},{0,1,0},{1,0,1}};
-		System.out.println(Arrays.deepToString(M));
+		//System.out.println(Arrays.deepToString(M));
 		
 		Data H = DancingLinks.init(M);
 		
@@ -179,9 +189,9 @@ public class Main {
 		
 		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin,primes);
 		
-		System.out.println(Arrays.deepToString(M));
+		//System.out.println(Arrays.deepToString(M));
 		
-		System.out.println("ok");
+		//System.out.println("ok");
 		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
 		for (LinkedList<LinkedList<Integer>> l:k){
 			System.out.println(l);
@@ -226,9 +236,9 @@ public class Main {
 		int[][] origin = new int[poly.cases.size()][2];
 		
 		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin,primes);
-		System.out.println(Arrays.deepToString(M));
+		//System.out.println(Arrays.deepToString(M));
 		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
-		System.out.println(k.size());
+		//System.out.println(k.size());
 		for (LinkedList<LinkedList<Integer>> l:k){
 			System.out.println(l);
 		}
@@ -250,7 +260,7 @@ public class Main {
 		int[][] origin = new int[poly.cases.size()][2];
 		
 		int[][] M =Cover.toExactCover(L, poly,origin);
-		System.out.println(Arrays.deepToString(M));
+		//System.out.println(Arrays.deepToString(M));
 		
 		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
 		//System.out.println(k.size());
@@ -282,12 +292,12 @@ public class Main {
 		int[][] origin = new int[poly.cases.size()][2];
 		
 		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin,primes);
-		System.out.println(Arrays.deepToString(origin));
+		//System.out.println(Arrays.deepToString(origin));
 
 		
-		System.out.println(Arrays.deepToString(M));
+		//System.out.println(Arrays.deepToString(M));
 		
-		System.out.println("ok");
+		//System.out.println("ok");
 		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
 		
 		Image2D frame= new Image2D(1000,1000);
