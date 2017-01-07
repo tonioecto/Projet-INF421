@@ -69,12 +69,7 @@ public class Main {
 		
 	//	Polyomino a = new Polyomino("[(0,0), (0,1), (0,2)]");
 	//	a.addCase(new Case(-1,1))
-//		int[] primes=Polyomino.initPrimes("Primes.txt",3000);
-//		LinkedList<Polyomino> a = Polyomino.fixed(8,primes);
-//		System.out.println(a.size());
-//		Image2D frame= new Image2D(2000,200);
-//		Image2dViewer test2 = new Image2dViewer(frame); 
-//		Polyomino.displayPolyominos(a, frame,20, Color.black,primes);
+
 		LinkedList<Integer> a = new LinkedList<Integer>();
 		a.add(1);a.add(2);a.add(3);
 		LinkedList<Integer> b = new LinkedList<Integer>();
@@ -119,12 +114,21 @@ public class Main {
 //		H=H.R;
 //		DancingLinks.coverColumn(H);
 
-		test4();
+		test91();
 
 		
 	}
 	
-	public static void test81(){
+	public static void fixed(){
+		int[] primes=Polyomino.initPrimes("Primes.txt",3000);
+		LinkedList<Polyomino> a = Polyomino.genFixed(5,primes);
+		System.out.println(a.size());
+		Image2D frame= new Image2D(2000,200);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		Polyomino.displayPolyominos(a, frame,20, Color.black,primes);
+	}
+	
+	public static void test811(){
 		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
 
 		Polyomino poly = new Polyomino("[(0,0), (0,2),(1,1),(1,0),(1,2),(2,1)]",primes);
@@ -135,7 +139,7 @@ public class Main {
 		
 		int[][] origin = new int[poly.cases.size()][2];
 		
-		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin);
+		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin,primes);
 		
 		System.out.println(Arrays.deepToString(M));
 		
@@ -176,7 +180,7 @@ public class Main {
 		
 		int[][] origin = new int[poly.cases.size()][2];
 		
-		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin);
+		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin,primes);
 		
 		System.out.println(Arrays.deepToString(M));
 		
@@ -191,9 +195,9 @@ public class Main {
 
 		Polyomino poly = new Polyomino("[(0,0), (0,2),(1,1),(1,0),(1,2),(2,1),(2,0),(2,2),(0,1)]",primes);
 		Polyomino p2 = new Polyomino("[(0,0),(0,1),(0,2)]",primes);
-		Polyomino p3 = new Polyomino("[(0,0),(1,0),(2,0)]",primes);
+		Polyomino p3 =new Polyomino("[(0,0),(0,1),(0,2)]",primes);
 		Polyomino p = new Polyomino("[(0,0),(0,1)]",primes);
-		Polyomino p1 = new Polyomino("[(0,0),(1,0)]",primes);
+		Polyomino p1 =new Polyomino("[(0,0),(0,1),(0,2)]",primes);
 		LinkedList<Polyomino> L = new LinkedList<Polyomino>();
 		L.add(p);
 		L.add(p1);
@@ -201,10 +205,10 @@ public class Main {
 		L.add(p3);
 		int[][] origin = new int[poly.cases.size()][2];
 		
-		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin);
-		System.out.println(Arrays.deepToString(M));
+		int[][] M =Cover.toExactCover(L, poly,origin);
+
 		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
-		System.out.println(k.size());
+		System.out.println("Nombre de solutions "+k.size());
 		for (LinkedList<LinkedList<Integer>> l:k){
 			System.out.println(l);
 		}
@@ -224,7 +228,7 @@ public class Main {
 		L.add(p3);
 		int[][] origin = new int[poly.cases.size()][2];
 		
-		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin);
+		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin,primes);
 		System.out.println(Arrays.deepToString(M));
 		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
 		System.out.println(k.size());
@@ -239,10 +243,10 @@ public class Main {
 		Polyomino p2 = new Polyomino("[(0,0),(0,1),(0,2)]",primes);
 		Polyomino p3 = new Polyomino("[(0,0),(1,0),(2,0)]",primes);
 		Polyomino p = new Polyomino("[(0,0),(0,1)]",primes);
-		//Polyomino p1 = new Polyomino("[(0,0),(1,0)]",primes);
+		Polyomino p1 = new Polyomino("[(0,0),(1,0)]",primes);
 		LinkedList<Polyomino> L = new LinkedList<Polyomino>();
 		L.add(p);
-		//L.add(p1);
+		L.add(p1);
 		L.add(p2);
 		L.add(p3);
 		//System.out.println(poly.height+"  "+poly.width);
@@ -280,7 +284,7 @@ public class Main {
 		
 		int[][] origin = new int[poly.cases.size()][2];
 		
-		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin);
+		int[][] M =Cover.toExactCoverNoRepet(L, poly,origin,primes);
 		System.out.println(Arrays.deepToString(origin));
 
 		
@@ -312,6 +316,167 @@ public class Main {
 		Image2D frame= new Image2D(1000,1000);
 		Image2dViewer test2 = new Image2dViewer(frame);
 		Polyomino.displayPolyomino(poly, 100, frame, Color.black, new int[] {0,0});
+		
+	}
+	
+	public static void test7(){  //Q8.1 affichage
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(0,0), (1,0),(0,1),(1,1),(2,1),(3,1),(0,2),(1,2),(2,2),(3,2),(4,2),(5,2),(0,3),(1,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(0,4),(1,4),(2,4),(3,4),(4,4),(5,4),(6,4),(7,4),(8,4),(9,4),(1,5),(2,5),(3,5),(4,5),(5,5),(6,5),(7,5),(8,5),(9,5),(10,5),(3,6),(4,6),(5,6),(6,6),(7,6),(8,6),(9,6),(10,6),(5,7),(6,7),(7,7),(8,7),(9,7),(10,7),(7,8),(8,8),(9,8),(10,8),(9,9),(10,9)]",primes);
+		
+		Image2D frame= new Image2D(1000,1000);
+		Image2dViewer test2 = new Image2dViewer(frame);
+		Polyomino.displayPolyomino(poly, 100, frame, Color.blue, new int[] {0,0});
+		
+	}
+	
+	public static void test8(){  //Q8.2  affichage
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(4,0,(5,0,(4,1,(5,1,(3,2,(4,2,(5,2,(6,2,(3,3,(4,3,(5,3,(6,3,(2,4,(3,4,(4,4,(5,4,(6,4,(7,4,(2,5,(3,5,(4,5,(5,5,(6,5,(7,5,(1,6,(2,6,(3,6,(4,6,(5,6,(6,6,(7,6,(8,6,(1,7,(2,7,(3,7,(4,7,(5,7,(6,7,(7,7,(8,7,(0,8,(1,8,(2,8,(3,8,(4,8,(5,8,(6,8,(7,8,(8,8,(9,8,(0,9,(1,9,(2,9,(3,9,4,9,5,9,6,9,7,9,8,9,9,9]",primes);
+		
+		Image2D frame= new Image2D(1000,1000);
+		Image2dViewer test2 = new Image2dViewer(frame);
+		Polyomino.displayPolyomino(poly, 100, frame, Color.blue, new int[] {0,0});
+		
+	}
+	
+	public static void test9(){  //Q8.3  affichage
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[4,0,5,0,3,1,4,1,5,1,6,1,2,2,3,2,4,2,5,2,6,2,7,2,1,3,2,3,3,3,4,3,5,3,6,3,7,3,8,3,0,4,1,4,2,4,3,4,4,4,5,4,6,4,7,4,8,4,9,4,0,5,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,9,5,1,6,2,6,3,6,4,6,5,6,6,6,7,6,8,6,2,7,3,7,4,7,5,7,6,7,7,7,3,8,4,8,5,8,6,8,4,9,5,9]",primes);
+		
+		Image2D frame= new Image2D(1000,1000);
+		Image2dViewer test2 = new Image2dViewer(frame);
+		Polyomino.displayPolyomino(poly, 100, frame, Color.blue, new int[] {0,0});
+		
+	}
+	
+	public static void test71(){  //Q8.1  
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(0,0), (1,0),(0,1),(1,1),(2,1),(3,1),(0,2),(1,2),(2,2),(3,2),(4,2),(5,2),(0,3),(1,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(0,4),(1,4),(2,4),(3,4),(4,4),(5,4),(6,4),(7,4),(8,4),(9,4),(1,5),(2,5),(3,5),(4,5),(5,5),(6,5),(7,5),(8,5),(9,5),(10,5),(3,6),(4,6),(5,6),(6,6),(7,6),(8,6),(9,6),(10,6),(5,7),(6,7),(7,7),(8,7),(9,7),(10,7),(7,8),(8,8),(9,8),(10,8),(9,9),(10,9)]",primes);
+		
+		LinkedList<Polyomino> L = Polyomino.genFree(5, primes);
+		
+		System.out.println("Nombre de Polyominos : "+L.size());
+
+
+		
+		
+		int[][] origin = new int[poly.cases.size()][2];
+		
+		int[][] M =Cover.toExactCoverNoRepetFree(L, poly,origin, primes);
+		
+		
+
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		
+		System.out.println("Nombre de solutions : "+k.size());
+		
+		Image2D frame= new Image2D(1000,1000);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		
+		LinkedList<LinkedList<Integer>> l = k.pop();
+			for(LinkedList<Integer> m:l){
+				Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), 100, frame, Color.black, new int[] {0,0});
+			}
+
+		
+		//for (LinkedList<LinkedList<Integer>> l:k){
+		//	for(LinkedList<Integer> m:l){
+		//		Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), 100, frame, Color.black, new int[] {0,0});
+		//	}
+		//}
+		
+	}
+	
+	public static void test81(){  //Q8.1  
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(4,0,(5,0,(4,1,(5,1,(3,2,(4,2,(5,2,(6,2,(3,3,(4,3,(5,3,(6,3,(2,4,(3,4,(4,4,(5,4,(6,4,(7,4,(2,5,(3,5,(4,5,(5,5,(6,5,(7,5,(1,6,(2,6,(3,6,(4,6,(5,6,(6,6,(7,6,(8,6,(1,7,(2,7,(3,7,(4,7,(5,7,(6,7,(7,7,(8,7,(0,8,(1,8,(2,8,(3,8,(4,8,(5,8,(6,8,(7,8,(8,8,(9,8,(0,9,(1,9,(2,9,(3,9,4,9,5,9,6,9,7,9,8,9,9,9]",primes);
+		
+		LinkedList<Polyomino> L = Polyomino.genFree(5, primes);
+		
+		System.out.println("Nombre de Polyominos : "+L.size());
+
+
+		
+		
+		int[][] origin = new int[poly.cases.size()][2];
+		
+		int[][] M =Cover.toExactCoverNoRepetFree(L, poly,origin, primes);
+		
+		
+
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		
+		System.out.println("Nombre de solutions : "+k.size());
+		
+		Image2D frame= new Image2D(1000,1000);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		
+		LinkedList<LinkedList<Integer>> l = k.pop();
+			for(LinkedList<Integer> m:l){
+				Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), 100, frame, Color.black, new int[] {0,0});
+			}
+
+		
+		//for (LinkedList<LinkedList<Integer>> l:k){
+		//	for(LinkedList<Integer> m:l){
+		//		Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), 100, frame, Color.black, new int[] {0,0});
+		//	}
+		//}
+		
+	}
+	
+	public static void test91(){  //Q8.1  
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[4,0,5,0,3,1,4,1,5,1,6,1,2,2,3,2,4,2,5,2,6,2,7,2,1,3,2,3,3,3,4,3,5,3,6,3,7,3,8,3,0,4,1,4,2,4,3,4,4,4,5,4,6,4,7,4,8,4,9,4,0,5,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,9,5,1,6,2,6,3,6,4,6,5,6,6,6,7,6,8,6,2,7,3,7,4,7,5,7,6,7,7,7,3,8,4,8,5,8,6,8,4,9,5,9]",primes);
+		
+		System.out.println("Nombre de cases : "+poly.size);
+
+		
+		LinkedList<Polyomino> L = Polyomino.genFree(5, primes);
+		
+		System.out.println("Nombre de Polyominos : "+L.size());
+
+
+		
+		
+		int[][] origin = new int[poly.cases.size()][2];
+		
+		int[][] M =Cover.toExactCoverNoRepetFree(L, poly,origin, primes);
+		
+		
+
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		
+		System.out.println("Nombre de solutions : "+k.size());
+		
+		if(k.size()==0) return;
+		
+		Image2D frame= new Image2D(1000,1000);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		
+		LinkedList<LinkedList<Integer>> l = k.pop();
+			for(LinkedList<Integer> m:l){
+				Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), 100, frame, Color.black, new int[] {0,0});
+			}
+
+		
+		//for (LinkedList<LinkedList<Integer>> l:k){
+		//	for(LinkedList<Integer> m:l){
+		//		Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), 100, frame, Color.black, new int[] {0,0});
+		//	}
+		//}
 		
 	}
 	

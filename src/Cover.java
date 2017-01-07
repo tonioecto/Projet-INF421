@@ -47,6 +47,51 @@ public class Cover {  // Tout est centré ?
 			}
 		}
 		
+		//System.out.println(L.size());
+		
+		int[][] EV = new int[L.size()][size];
+		int i=0;
+		for(int[] l:L){
+			EV[i]=l;
+			i++;
+		}
+		
+		
+		return EV;
+	}
+	
+	
+	
+	
+	// Changer DancingLinks pour retrouver les polyominos originels ? Il faudrait que danconglinks renvoient aussi la position des int[] retenus
+	
+	public static int[][] toExactCoverNoRepet(LinkedList<Polyomino> poly, Polyomino base, int[][] origin, int[] primes){
+		
+		int[][] M = convert(base,origin);
+		int size=base.size;
+		
+		LinkedList<int[]> L = new LinkedList<int[]>();
+		int k=0;
+		
+		for(Polyomino p : poly){
+			
+			p.recentre(primes);
+			
+			for(int i = 0; i<=M.length-p.width; i++){
+				for(int j=0; j<=M[0].length-p.height; j++){
+					
+					int[] l=(place(p,M,i,j,size));
+					
+					int[] l2=new int[poly.size()];
+					l2[k]=1;
+					
+					
+					if(l!=null) L.add(join(l, l2));
+				}
+			}
+			k++;
+		}
+		
 		System.out.println(L.size());
 		
 		int[][] EV = new int[L.size()][size];
@@ -60,9 +105,7 @@ public class Cover {  // Tout est centré ?
 		return EV;
 	}
 	
-	// Changer DancingLinks pour retrouver les polyominos originels ? Il faudrait que danconglinks renvoient aussi la position des int[] retenus
-	
-	public static int[][] toExactCoverNoRepet(LinkedList<Polyomino> poly, Polyomino base, int[][] origin){
+public static int[][] toExactCoverNoRepetFree(LinkedList<Polyomino> poly, Polyomino base, int[][] origin, int[] primes){
 		
 		int[][] M = convert(base,origin);
 		int size=base.size;
@@ -71,16 +114,69 @@ public class Cover {  // Tout est centré ?
 		int k=0;
 		
 		for(Polyomino p : poly){
-			for(int i = 0; i<=M.length-p.width; i++){
-				for(int j=0; j<=M[0].length-p.height; j++){
-					
-					int[] l=(place(p,M,i,j,size));
-					
-					int[] l2=new int[poly.size()];
-					l2[k]=1;
-					
-					
-					if(l!=null) L.add(join(l, l2));
+			
+			p.recentre(primes);
+			LinkedList<Polyomino> liste = new LinkedList<Polyomino>();
+			liste.add(p);
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p);
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p);
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p);
+			
+			
+			
+			Polyomino p2 = p.reflection(true, primes);
+			p2.recentre(primes);
+			liste.add(p2);
+			
+			p2 = p.reflection(false, primes);
+			p2.recentre(primes);
+			liste.add(p2);
+			
+			p.rotate(true, primes);
+			p.recentre(primes);
+			
+			p2 = p.reflection(true, primes);
+			p2.recentre(primes);
+			liste.add(p2);
+			
+			p2 = p.reflection(false, primes);
+			p2.recentre(primes);
+			liste.add(p2);
+			
+			LinkedList<Polyomino> liste2 = new LinkedList<Polyomino>();
+			LinkedList<Integer> listeInt = new LinkedList<Integer>();
+			
+			for(Polyomino po:liste){
+				Integer a = po.key;
+				if(!listeInt.contains(a)){
+					liste2.add(po);
+					listeInt.add(a);
+				}
+				
+			}
+
+			
+			
+			
+			for(Polyomino p3:liste2){
+				for(int i = 0; i<=M.length-p3.width; i++){
+					for(int j=0; j<=M[0].length-p3.height; j++){
+						
+						
+						int[] l=(place(p3,M,i,j,size));
+						
+						int[] l2=new int[poly.size()];
+						l2[k]=1;
+						
+						
+						if(l!=null) L.add(join(l, l2));
+						}
 				}
 			}
 			k++;

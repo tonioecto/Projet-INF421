@@ -37,6 +37,8 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 
 		size= coor.length/2;
 		cases = new LinkedList<Case>();;
+		
+		//System.out.println(coor.length);
 
 		for(int i=0; i<coor.length;i+=2 ){
 			int a =Integer.parseInt(coor[i]);
@@ -189,6 +191,7 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		this.maxx=this.maxy;
 		this.maxy=temp;
 		this.key=this.valKey(primes);
+		//this.recentre(primes);  // Ajout
 
 	}
 
@@ -213,6 +216,7 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 		poly.width=this.width;
 		//for (Case c:poly.cases){miny=Math.min(miny, c.ordonnee);minx=Math.min(minx, c.abscisse);}
 		poly.key=poly.valKey(primes);
+		//poly.recentre(primes);   // Ajout
 		return poly;
 		
 	}
@@ -328,7 +332,10 @@ public class Polyomino {  // Pas de n�gatif, tout est centr�
 	public static void displayPolyominos(LinkedList<Polyomino>  poly, Image2D frame, int size, Color color,int[] primes){  // Rajouter une liste de couleur ?
 		int[] pointeur=new int[] {1,0};
 		for(Polyomino p:poly){
-			p.recentre(primes);
+			//p.recentre(primes);
+			
+			System.out.println(p.width+"   "+p.height);
+			
 			//p=p.reflection(false);
 			displayPolyomino(p,size,frame,color,pointeur);
 			//System.out.println(p.width);
