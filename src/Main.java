@@ -93,39 +93,36 @@ public class Main {
 //			System.out.println(l);
 //		}
 		
-		//System.out.print((char) 65);
+	
 		
 
-		//Data H= DancingLinks.init(M);
-//		H=H.L.D.D.L.D;
-//		System.out.println(H.N);
-//		H=H.D;
-//		for(int i=0; i<10; i++){
-//			System.out.println(H);
-//			H=H.L;
-//		}
-//		
 
+
+
+		expandNK(8,4);
 		
-//		H=H.R.R;
-//		DancingLinks.coverColumn(H);
-//		H=H.D;
-//		DancingLinks.coverColumn(H);
-//		H=H.R;
-//		DancingLinks.coverColumn(H);
-
-		test91();
 
 		
 	}
 	
-	public static void fixed(){
+	public static void fixed(int n){
 		int[] primes=Polyomino.initPrimes("Primes.txt",3000);
-		LinkedList<Polyomino> a = Polyomino.genFixed(5,primes);
+		LinkedList<Polyomino> a = Polyomino.genFixed(n,primes);
 		System.out.println(a.size());
 		Image2D frame= new Image2D(2000,200);
 		Image2dViewer test2 = new Image2dViewer(frame); 
 		Polyomino.displayPolyominos(a, frame,20, Color.black,primes);
+	}
+	
+	public static void testExpand(int k){ // Test expand
+		int[] primes=Polyomino.initPrimes("Primes.txt",3000);
+		Polyomino poly = new Polyomino("[(0,0), (0,2),(1,1),(0,1)]",primes);
+		Polyomino p = Polyomino.expand(poly, k, primes);
+		Image2D frame= new Image2D(2000,200);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		p.recentre(primes);
+		Polyomino.displayPolyomino(poly, 20,frame, Color.black,primes);
+
 	}
 	
 	public static void test811(){
@@ -395,7 +392,7 @@ public class Main {
 		
 	}
 	
-	public static void test81(){  //Q8.1  
+	public static void test81(){  //Q8.2  
 		
 		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
 
@@ -435,7 +432,7 @@ public class Main {
 		
 	}
 	
-	public static void test91(){  //Q8.1  
+	public static void test91(){  //Q8.3  
 		
 		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
 
@@ -480,10 +477,169 @@ public class Main {
 		
 	}
 	
-	public static void test(int[] l2, int[] l){
-		System.out.println();
+	public static void testRectangle(){  //Trouve tous les pavages par des free pentaminoes, sans répétition, en comptant les symétries. (Diviser par 4 pour le nombre de solutions uniques)
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = Polyomino.Rectangle(3, 20, primes);  // Changer ici pour les dimension du rectangle
+		
+		System.out.println("Nombre de cases : "+poly.size);
+
+		
+		LinkedList<Polyomino> L = Polyomino.free(5, primes);  // Taille des polyominos
+		
+		System.out.println("Nombre de Polyominos : "+L.size());
+
+
+		
+		
+		int[][] origin = new int[poly.cases.size()][2];
+		
+		int[][] M =Cover.toExactCoverNoRepetFree(L, poly,origin, primes);
+		
+		
+
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		
+		System.out.println("Nombre de solutions : "+k.size());
+		
+		if(k.size()==0) return;
+		
+		Image2D frame= new Image2D(1000,1000);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		
+		LinkedList<LinkedList<Integer>> l = k.pop();
+		for(LinkedList<Integer> m:l){
+			Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), 100, frame, Color.black, new int[] {0,0});
+		}
+
+		
+
+		
+	}
+	
+	public static void testRectangle2(){  //Trouve tous les pavages par des fixed pentaminoes, avec répétition, en comptant les symétries. (Diviser par 4 pour le nombre de solutions uniques)
+		
+		Color[] color = new Color[]{Color.BLUE, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.ORANGE, Color.PINK, Color.RED, Color.YELLOW};
+		
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = Polyomino.Rectangle(6, 5, primes);  // Changer ici pour les dimension du rectangle
+		
+		System.out.println("Nombre de cases : "+poly.size);
+
+		
+		LinkedList<Polyomino> L = Polyomino.fixed(5, primes);  // Taille des polyominos
+		
+		System.out.println("Nombre de Polyominos : "+L.size());
+
+
+		
+		
+		int[][] origin = new int[poly.cases.size()][2];
+		
+		int[][] M =Cover.toExactCover(L, poly,origin);
+		
+		
+
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		
+		System.out.println("Nombre de solutions : "+k.size());
+		
+		if(k.size()==0) return;
+		
+		Image2D frame= new Image2D(1000,1000);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		
+		LinkedList<LinkedList<Integer>> l = k.pop();
+		
+		int i=0;
+		for(LinkedList<Integer> m:l){
+			Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), 100, frame, color[i%color.length], new int[] {0,0});
+			i++;
+		}
+
+		
+
+		
+	}
+	
+	public static void expandNK(int n, int k){
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+		LinkedList<Polyomino> L = Polyomino.genFree(n, primes);
+		
+		int compteur=0;
+		
+		for(Polyomino p:L){
+			LinkedList<Polyomino> l = new LinkedList<Polyomino>();
+			l.add(p);
+
+			Polyomino poly = Polyomino.expand(p, k, primes);
+			int[][] origin = new int[poly.cases.size()][2];
+			int[][] M =Cover.toExactCoverFree(l, poly,origin, primes);
+			LinkedList<LinkedList<LinkedList<Integer>>> sol=DancingLinks.exactCover(DancingLinks.init(M));
+			if(sol.size()!=0) compteur++;
+		}
+		System.out.println(compteur);
+
+	}
+	
+	public static void test(){
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+		
+		LinkedList<Polyomino> poly = Polyomino.genFree(5, primes);
+
+		LinkedList<Polyomino> liste2 = new LinkedList<Polyomino>();
+
+		for(Polyomino p : poly){
+			
+			p.recentre(primes);
+			LinkedList<Polyomino> liste = new LinkedList<Polyomino>();
+			liste.add(p.copy(primes));
+			
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p.copy(primes));
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p.copy(primes));
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p.copy(primes));
+			
+			
+			p=p.reflection(true, primes);
+			
+			p.recentre(primes);
+			liste.add(p.copy(primes));
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p.copy(primes));
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p.copy(primes));
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p.copy(primes));
+			
+			LinkedList<Integer> listeInt = new LinkedList<Integer>();
+			
+			for(Polyomino po:liste){
+				Integer a = po.key;
+				if(!listeInt.contains(a)){
+					liste2.add(po);
+					listeInt.add(a);
+				}
+				
+			}
+		}
+		
+		System.out.println(liste2.size());
+		
 	}
 	
 	
 
 }
+

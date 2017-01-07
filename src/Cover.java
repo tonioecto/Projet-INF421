@@ -117,37 +117,32 @@ public static int[][] toExactCoverNoRepetFree(LinkedList<Polyomino> poly, Polyom
 			
 			p.recentre(primes);
 			LinkedList<Polyomino> liste = new LinkedList<Polyomino>();
-			liste.add(p);
-			p.rotate(true, primes);
-			p.recentre(primes);
-			liste.add(p);
-			p.rotate(true, primes);
-			p.recentre(primes);
-			liste.add(p);
-			p.rotate(true, primes);
-			p.recentre(primes);
-			liste.add(p);
-			
-			
-			
-			Polyomino p2 = p.reflection(true, primes);
-			p2.recentre(primes);
-			liste.add(p2);
-			
-			p2 = p.reflection(false, primes);
-			p2.recentre(primes);
-			liste.add(p2);
+			liste.add(p.copy(primes));
 			
 			p.rotate(true, primes);
 			p.recentre(primes);
+			liste.add(p.copy(primes));
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p.copy(primes));
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p.copy(primes));
 			
-			p2 = p.reflection(true, primes);
-			p2.recentre(primes);
-			liste.add(p2);
 			
-			p2 = p.reflection(false, primes);
-			p2.recentre(primes);
-			liste.add(p2);
+			p=p.reflection(true, primes);
+			
+			p.recentre(primes);
+			liste.add(p.copy(primes));
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p.copy(primes));
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p.copy(primes));
+			p.rotate(true, primes);
+			p.recentre(primes);
+			liste.add(p.copy(primes));
 			
 			LinkedList<Polyomino> liste2 = new LinkedList<Polyomino>();
 			LinkedList<Integer> listeInt = new LinkedList<Integer>();
@@ -194,6 +189,83 @@ public static int[][] toExactCoverNoRepetFree(LinkedList<Polyomino> poly, Polyom
 		
 		return EV;
 	}
+
+public static int[][] toExactCoverFree(LinkedList<Polyomino> poly, Polyomino base, int[][] origin, int[] primes){
+	
+	int[][] M = convert(base,origin);
+	int size=base.size;
+	
+	LinkedList<int[]> L = new LinkedList<int[]>();
+	
+	for(Polyomino p : poly){
+		
+		p.recentre(primes);
+		LinkedList<Polyomino> liste = new LinkedList<Polyomino>();
+		liste.add(p.copy(primes));
+		
+		p.rotate(true, primes);
+		p.recentre(primes);
+		liste.add(p.copy(primes));
+		p.rotate(true, primes);
+		p.recentre(primes);
+		liste.add(p.copy(primes));
+		p.rotate(true, primes);
+		p.recentre(primes);
+		liste.add(p.copy(primes));
+		
+		
+		p=p.reflection(true, primes);
+		
+		p.recentre(primes);
+		liste.add(p.copy(primes));
+		p.rotate(true, primes);
+		p.recentre(primes);
+		liste.add(p.copy(primes));
+		p.rotate(true, primes);
+		p.recentre(primes);
+		liste.add(p.copy(primes));
+		p.rotate(true, primes);
+		p.recentre(primes);
+		liste.add(p.copy(primes));
+		
+		LinkedList<Polyomino> liste2 = new LinkedList<Polyomino>();
+		LinkedList<Integer> listeInt = new LinkedList<Integer>();
+		
+		for(Polyomino po:liste){
+			Integer a = po.key;
+			if(!listeInt.contains(a)){
+				liste2.add(po);
+				listeInt.add(a);
+			}
+			
+		}
+
+		for(Polyomino p3:liste2){
+			for(int i = 0; i<=M.length-p3.width; i++){
+				for(int j=0; j<=M[0].length-p3.height; j++){
+					
+					
+					int[] l=(place(p3,M,i,j,size));
+				
+					if(l!=null) L.add(l);
+					}
+			}
+		}
+		
+	}
+	
+	//System.out.println(L.size());
+	
+	int[][] EV = new int[L.size()][size];
+	int i=0;
+	for(int[] l:L){
+		EV[i]=l;
+		i++;
+	}
+	
+	
+	return EV;
+}
 
 	public static int[] join(int[] l2, int[] l) { // Pas fini !
 		// TODO Auto-generated method stub

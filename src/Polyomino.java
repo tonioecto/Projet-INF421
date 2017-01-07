@@ -105,27 +105,7 @@ public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
 
 
 	public void addCase(Case c,int[] primes){  // Pour les cases positives, avec la clï¿½, on pourrait s'assurer qu'on ne rajoute pas 2 fois la mï¿½me case
-//		if(c.abscisse<0 || c.ordonnee<0){
-//			this.translate(new int[] {-Math.min(0,c.abscisse),-Math.min(0,c.ordonnee)} );
-//			c.abscisse+=-Math.min(0,c.abscisse);
-//			c.ordonnee+=-Math.min(0,c.ordonnee);
-//
-//		}
 
-		/*if(c.abscisse<0 && c.ordonnee<0){
-			this.translate(new int[] {-c.abscisse,-c.ordonnee} );
-			c.abscisse=0;
-			c.ordonnee=0;
-		}
-		else if (c.abscisse<0){
-			this.translate(new int[] {-c.abscisse,0} );
-			c.abscisse=0;
-		}
-
-		else if (c.ordonnee<0){
-			this.translate(new int[] {0,-c.ordonnee} );
-			c.ordonnee=0;
-		}*/
 
 
 		
@@ -147,6 +127,8 @@ public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
 		this.key=this.valKey(primes);
 
 	}
+	
+	
 
 	public void translate(int[] coor,int[] primes){ // A test
 		this.key=1;
@@ -220,6 +202,21 @@ public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
 		return poly;
 		
 	}
+	
+	public static Polyomino expand(Polyomino p,  int k, int[] primes){
+		
+		Polyomino poly=new Polyomino();
+		for(Case c:p.cases){
+			for(int i=0; i<k; i++){
+				for(int j=0; j<k; j++){
+					poly.addCase(new Case(c.abscisse*k+i,c.ordonnee*k+j), primes);
+				}
+			}
+		}
+		return poly;
+		
+	}
+	
 	//peut etre probleme sur cette fonction avec les minx miny
 
 	// Rajouter une origine ?
@@ -279,13 +276,14 @@ public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
 			
 			// PB de dépassemment de integer
 			
-			Edge e1 = new Edge((origin[0]+c.abscisse),(origin[1]+c.ordonnee),(origin[0]+c.abscisse+1),(origin[1]+c.ordonnee),2,Color.WHITE);
-			Edge e2 = new Edge((origin[0]+c.abscisse),(origin[1]+c.ordonnee),(origin[0]+c.abscisse),(origin[1]+c.ordonnee+1),2,Color.WHITE);
-			Edge e3 = new Edge((origin[0]+c.abscisse+1),(origin[1]+c.ordonnee),(origin[0]+c.abscisse+1),(origin[1]+c.ordonnee+1),2,Color.WHITE);
-			Edge e4 = new Edge((origin[0]+c.abscisse),(origin[1]+c.ordonnee+1),(origin[0]+c.abscisse+1),(origin[1]+c.ordonnee+1),2,Color.WHITE);
+			Edge e1 = new Edge((origin[0]+c.abscisse),(origin[1]+c.ordonnee),(origin[0]+c.abscisse+1),(origin[1]+c.ordonnee),5,Color.WHITE);
+			Edge e2 = new Edge((origin[0]+c.abscisse),(origin[1]+c.ordonnee),(origin[0]+c.abscisse),(origin[1]+c.ordonnee+1),5,Color.WHITE);
+			Edge e3 = new Edge((origin[0]+c.abscisse+1),(origin[1]+c.ordonnee),(origin[0]+c.abscisse+1),(origin[1]+c.ordonnee+1),5,Color.WHITE);
+			Edge e4 = new Edge((origin[0]+c.abscisse),(origin[1]+c.ordonnee+1),(origin[0]+c.abscisse+1),(origin[1]+c.ordonnee+1),5,Color.WHITE);
 			
 			if(M.containsKey(e1.hashCode())){
-				M.get(e1.hashCode()).setColor(Color.RED);
+				M.get(e1.hashCode()).setColor(Color.DARK_GRAY);
+				M.get(e1.hashCode()).width=0;
 				//System.out.println("ok1");
 			}
 			
@@ -297,7 +295,9 @@ public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
 			//System.out.println(e3.hashCode());
 			
 			if(M.containsKey(e2.hashCode())){
-				M.get(e2.hashCode()).setColor(Color.RED);
+				M.get(e2.hashCode()).setColor(Color.DARK_GRAY);
+				M.get(e2.hashCode()).width=0;
+
 				//System.out.println("ok2");
 			}
 			else{
@@ -305,7 +305,9 @@ public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
 			}
 			
 			if(M.containsKey(e3.hashCode())){
-				M.get(e3.hashCode()).setColor(Color.RED);
+				M.get(e3.hashCode()).setColor(Color.DARK_GRAY);
+				M.get(e3.hashCode()).width=0;
+
 				//System.out.println("ok3");
 			}
 			else{
@@ -313,7 +315,9 @@ public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
 			}
 			
 			if(M.containsKey(e4.hashCode())){
-				M.get(e4.hashCode()).setColor(Color.RED);
+				M.get(e4.hashCode()).setColor(Color.DARK_GRAY);
+				M.get(e4.hashCode()).width=0;
+
 				//System.out.println("ok4");
 			}
 			else{
@@ -523,6 +527,11 @@ public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
 		ca.add(new Case(0,0));
 		Polyomino p=new Polyomino();
 		LinkedList<Polyomino> a=interm(table,ca,p,n,primes);
+		
+		for(Polyomino p2:a){
+			p2.recentre(primes);
+		}
+		
 		return a;
 	}
 
@@ -565,6 +574,10 @@ public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
 				}
 				if (a){result.add(p);}
 			}
+		}
+		
+		for(Polyomino p2:result){
+			p2.recentre(primes);
 		}
 		return result;
 	}
@@ -642,7 +655,15 @@ public class Polyomino {  // Pas de nï¿½gatif, tout est centrï¿½
 	}
 	
 	
-	//Task 5
+	public static Polyomino Rectangle(int longueur, int largeur, int[] primes){
+		Polyomino poly = new Polyomino();
+		for(int i=0; i<longueur; i++){
+			for(int j=0; j<largeur; j++){
+				poly.addCase(new Case(i,j), primes);
+			}
+		}
+		return poly;
+	}
 	
 
 }
