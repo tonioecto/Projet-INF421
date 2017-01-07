@@ -1,23 +1,22 @@
 import java.util.LinkedList;
 import java.util.Arrays;
 
-public class Cover {  // Tout est centré ?
+public class Cover {  // Ce fichier contient les fonctions nécessaires pour transformer un problème de recouvrement en un problème d'exact cover
 	
-	public static int[][] convert(Polyomino p , int[][] Origin){
+	public static int[][] convert(Polyomino p , int[][] origin){  //On converti le Polyomino de réference en une matrice
 		int i=1;
 		int[][] M = new int[p.width][p.height];
 		for(Case c : p.cases){
-			M[c.abscisse][c.ordonnee]=i;
-			Origin[i-1][0]=c.abscisse;
-			Origin[i-1][1]=c.ordonnee;
+			M[c.abscisse][c.ordonnee]=i;                          // A chaque Case, on associe un entier
+			origin[i-1][0]=c.abscisse;                            // La matrice origin permet de retrouver les cases en connaissant son ID (entier)
+			origin[i-1][1]=c.ordonnee;
 			i++;
 		}
 		return M;
 	}
 	
 	public static int[] place(Polyomino p, int[][] M, int orX, int orY, int size){  //size= nombre de cases de M
-		//if(orX+p.width>M[0].length) return null; // A vérfier
-		//if(orY+p.height>M.length) return null; // A vérifier
+
 		
 		int[] L = new int[size];   // Matrice mise a plat
 		

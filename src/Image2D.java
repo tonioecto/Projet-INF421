@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 public class Image2D {
 	private int width; // width of the image
 	private int height; // height of the image
-	private java.util.List<ColoredCases> coloredCases; // colored polygons in the image
+	private java.util.List<ColoredCases> coloredCases; // colored cases in the image
 	private java.util.List<Edge> edges; // edges to add to separate polygons
 
 	// Constructor that instantiates an image of a specified width and height
@@ -29,7 +29,7 @@ public class Image2D {
 		return height;
 	}
 
-	// Return the colored polygons of the image
+	// Return the colored cases of the image
 	public java.util.List<ColoredCases> getColoredCases() {
 		return coloredCases;
 	}
@@ -79,7 +79,7 @@ class Image2dComponent extends JComponent {
         g2.setBackground(Color.white);
         g2.clearRect(0,0,d.width,d.height);
         
-        // draw the polygons
+        // draw the cases
 		synchronized (img.getColoredCases()) {
 			for (ColoredCases coloredCase : img.getColoredCases()) {
 				g2.setColor(coloredCase.color);
