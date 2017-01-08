@@ -683,6 +683,7 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 
 	}
 
+	
 	public static LinkedList<Polyomino> free(int n, int[] primes) {  // On énumère efficacement tous les polyomino libres
 		LinkedList<Polyomino> list = fixed(n, primes);
 		LinkedList<Polyomino> result = new LinkedList<Polyomino>();
@@ -692,10 +693,11 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 		
 		for (Polyomino p : list) {
 			p.recentre(primes);
-			M.put(p.key, p);
-		}
 			
-			Collection<Polyomino> C = M.values();
+			M.put(p.freeKey(primes), p);
+		}
+		
+		Collection<Polyomino> C = M.values();
 
 		for (Polyomino p2 : C) {
 			p2.recentre(primes);
@@ -703,6 +705,43 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 		}
 		return result;
 	}
+	
+	public int freeKey(int[] primes){
+		int minKey=this.key;
+		
+		this.rotate(true,primes);
+		this.recentre(primes);
+		minKey=Math.min(minKey, this.key);
+		
+		this.rotate(true,primes);
+		this.recentre(primes);
+		minKey=Math.min(minKey, this.key);
+		
+		this.rotate(true,primes);
+		this.recentre(primes);
+		minKey=Math.min(minKey, this.key);
+		
+		Polyomino p = this.reflection(true, primes);
+		
+		p.recentre(primes);
+		minKey=Math.min(minKey, p.key);
+		
+		p.rotate(true, primes);
+		p.recentre(primes);
+		minKey=Math.min(minKey, p.key);
+		
+		p.rotate(true, primes);
+		p.recentre(primes);
+		minKey=Math.min(minKey, p.key);
+		
+		p.rotate(true, primes);
+		p.recentre(primes);
+		minKey=Math.min(minKey, p.key);
+		
+		return minKey;
+	}
+	
+	
 
 	// Task 4
 	public static int[][] copy(int[][] m) {  // On copie 

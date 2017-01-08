@@ -16,12 +16,14 @@ public class Test {
 		//testDilatation(3, 30);   //Arguments : k, size 
 		//testLecture(60);   //Argument : size 
 		
+		
 		// Question 2
 		//generateFixedV1(5);   //Arguments : n
 		//generateFreeV1(5);   //Arguments : n
 		
 		//generateFixedPrintV12(5, 30);   //Arguments : n,size 
-		generateFreePrintV1(5, 30);   //Arguments : n,size
+		//generateFreePrintV1(5, 30);   //Arguments : n,size
+		
 		
 		// Question 3
 		//generateFixedV2(5);   //Arguments : n
@@ -31,9 +33,23 @@ public class Test {
 		//generateFreePrintV2(5, 30);   //Arguments : n,size
 		
 		//compareFixed(8);   // Argument : n
-		//compareFree(8);   // Argument : n
+		compareFree(8);   // Argument : n
+		
 		
 		// Question 4
+		
+		
+		// Question 8
+		//tilings1(60);  // Argument : size
+		//tilings2(60);  // Argument : size
+		//tilings3(60);  // Argument : size
+		
+		//rectangleFree(5,20,3,60);  //Arguments : n, longueur, largeur, size  
+		//rectangleFixed(4,3,4,60);  //Arguments : n, longueur, largeur, size 
+		
+		//expandNK(8,4,40);  //Arguments : n, k, size 
+		
+		
 		
 	}
 	
@@ -136,6 +152,7 @@ public class Test {
 		Polyomino.displayPolyominos(L2, frame, 60, Color.black, new int[] {0,0});
 	}
 
+	
 	//Question 2
 	
 	public static void generateFixedV1(int n){ //Génère les Polyominos fixes de taille n de manière optimisée
@@ -196,6 +213,7 @@ public class Test {
 		Image2dViewer test2 = new Image2dViewer(frame);
 		Polyomino.displayPolyominos(L, frame, 30, Color.black, new int[] {0,0});
 	}
+	
 	
 	// Question 3
 	
@@ -292,8 +310,241 @@ public class Test {
 
 	}
 	
+	
 	//Question 8
 	
+	public static void tilings1(int size){  //Pave la première figure de l'énoncé 
+		
+		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int height = (int)dimension.getHeight();
+		int width  = (int)dimension.getWidth();
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(0,0), (1,0),(0,1),(1,1),(2,1),(3,1),(0,2),(1,2),(2,2),(3,2),(4,2),(5,2),(0,3),(1,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(0,4),(1,4),(2,4),(3,4),(4,4),(5,4),(6,4),(7,4),(8,4),(9,4),(1,5),(2,5),(3,5),(4,5),(5,5),(6,5),(7,5),(8,5),(9,5),(10,5),(3,6),(4,6),(5,6),(6,6),(7,6),(8,6),(9,6),(10,6),(5,7),(6,7),(7,7),(8,7),(9,7),(10,7),(7,8),(8,8),(9,8),(10,8),(9,9),(10,9)]",primes);
+		
+		LinkedList<Polyomino> L = Polyomino.genFree(5, primes);
+		
+		System.out.println("Nombre de Polyominos : "+L.size());
+
+		int[][] origin = new int[poly.cases.size()][2];
+		
+		int[][] M =Cover.toExactCoverNoRepetFree(L, poly,origin, primes);
+		
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		
+		System.out.println("Nombre de solutions : "+k.size());
+		
+		Image2D frame= new Image2D(width,height);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		
+		LinkedList<LinkedList<Integer>> l = k.pop();
+			for(LinkedList<Integer> m:l){
+				Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), size, frame, Color.black, new int[] {0,0});
+			}
+		
+	}
+	
+	public static void tilings2(int size){  //Pave la deuxième figure de l'énoncé
+		
+		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int height = (int)dimension.getHeight();
+		int width  = (int)dimension.getWidth();
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[(4,0,(5,0,(4,1,(5,1,(3,2,(4,2,(5,2,(6,2,(3,3,(4,3,(5,3,(6,3,(2,4,(3,4,(4,4,(5,4,(6,4,(7,4,(2,5,(3,5,(4,5,(5,5,(6,5,(7,5,(1,6,(2,6,(3,6,(4,6,(5,6,(6,6,(7,6,(8,6,(1,7,(2,7,(3,7,(4,7,(5,7,(6,7,(7,7,(8,7,(0,8,(1,8,(2,8,(3,8,(4,8,(5,8,(6,8,(7,8,(8,8,(9,8,(0,9,(1,9,(2,9,(3,9,4,9,5,9,6,9,7,9,8,9,9,9]",primes);
+		
+		LinkedList<Polyomino> L = Polyomino.genFree(5, primes);
+		
+		System.out.println("Nombre de Polyominos : "+L.size());
+
+
+		
+		
+		int[][] origin = new int[poly.cases.size()][2];
+		
+		int[][] M =Cover.toExactCoverNoRepetFree(L, poly,origin, primes);
+		
+		
+
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		
+		System.out.println("Nombre de solutions : "+k.size());
+		
+		Image2D frame= new Image2D(width,height);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		
+		LinkedList<LinkedList<Integer>> l = k.pop();
+			for(LinkedList<Integer> m:l){
+				Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), size, frame, Color.black, new int[] {0,0});
+			}
+		
+	}
+	
+	public static void tilings3(int size){  //Pave la troisième figure de l'énoncé   
+		
+		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int height = (int)dimension.getHeight();
+		int width  = (int)dimension.getWidth();
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[4,0,5,0,3,1,4,1,5,1,6,1,2,2,3,2,4,2,5,2,6,2,7,2,1,3,2,3,3,3,4,3,5,3,6,3,7,3,8,3,0,4,1,4,2,4,3,4,4,4,5,4,6,4,7,4,8,4,9,4,0,5,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,9,5,1,6,2,6,3,6,4,6,5,6,6,6,7,6,8,6,2,7,3,7,4,7,5,7,6,7,7,7,3,8,4,8,5,8,6,8,4,9,5,9]",primes);
+		
+		System.out.println("Nombre de cases : "+poly.size);
+
+		
+		LinkedList<Polyomino> L = Polyomino.genFree(5, primes);
+		
+		System.out.println("Nombre de Polyominos : "+L.size());
+
+
+		
+		
+		int[][] origin = new int[poly.cases.size()][2];
+		
+		int[][] M =Cover.toExactCoverNoRepetFree(L, poly,origin, primes);
+		
+		
+
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		
+		System.out.println("Nombre de solutions : "+k.size());
+		
+		if(k.size()==0) return;
+		
+		Image2D frame= new Image2D(width,height);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		
+		LinkedList<LinkedList<Integer>> l = k.pop();
+			for(LinkedList<Integer> m:l){
+				Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), size, frame, Color.black, new int[] {0,0});
+			}
+
+	}
+
+	
+	public static void rectangleFree(int n, int longueur, int largeur, int size){  //Trouve tous les pavages d'un rectangle par des polyominos libres de taille n, sans répétition, en comptant les symétries. (Diviser par 4 pour le nombre de solutions uniques)
+		
+		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int height = (int)dimension.getHeight();
+		int width  = (int)dimension.getWidth();
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = Polyomino.Rectangle(longueur, largeur, primes);  // Changer ici pour les dimension du rectangle
+		
+		System.out.println("Nombre de Cases : "+poly.size);
+
+		
+		LinkedList<Polyomino> L = Polyomino.free(n, primes);  // Taille des polyominos
+		
+		System.out.println("Nombre de Polyominos : "+L.size());
+
+
+		
+		
+		int[][] origin = new int[poly.cases.size()][2];
+		
+		int[][] M =Cover.toExactCoverNoRepetFree(L, poly,origin, primes);
+		
+		
+
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		
+		System.out.println("Nombre de solutions : "+k.size());
+		
+		if(k.size()==0) return;
+		
+		Image2D frame= new Image2D(width,height);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		
+		LinkedList<LinkedList<Integer>> l = k.pop();
+		for(LinkedList<Integer> m:l){
+			Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), size, frame, Color.black, new int[] {0,0});
+		}
+
+		
+
+		
+	}
+	
+	public static void rectangleFixed(int n, int longueur, int largeur, int size){ //Trouve tous les pavages d'un rectangle par des polyominos fixes de taille n, sans répétition, en comptant les symétries. (Diviser par 4 pour le nombre de solutions uniques)
+		
+		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int height = (int)dimension.getHeight();
+		int width  = (int)dimension.getWidth();
+				
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = Polyomino.Rectangle(longueur, largeur, primes);  // Changer ici pour les dimension du rectangle
+		
+		System.out.println("Nombre de Cases : "+poly.size);
+
+		
+		LinkedList<Polyomino> L = Polyomino.fixed(n, primes);  // Taille des polyominos
+		
+		System.out.println("Nombre de Polyominos : "+L.size());
+
+
+		
+		
+		int[][] origin = new int[poly.cases.size()][2];
+		
+		int[][] M =Cover.toExactCover(L, poly,origin);
+		
+		
+
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		
+		System.out.println("Nombre de solutions : "+k.size());
+		
+		if(k.size()==0) return;
+		
+		Image2D frame= new Image2D(width,height);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		
+		LinkedList<LinkedList<Integer>> l = k.pop();
+		
+		for(LinkedList<Integer> m:l){
+			Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), size, frame, Color.black, new int[] {0,0});
+		}
+
+
+	}
+	
+	public static void expandNK(int n, int k, int size){
+		
+		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int height = (int)dimension.getHeight();
+		int width  = (int)dimension.getWidth();
+				
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+		LinkedList<Polyomino> L = Polyomino.genFree(n, primes);
+		LinkedList<Polyomino> result = new LinkedList<Polyomino>();
+		
+		int compteur=0;
+		
+		for(Polyomino p:L){
+			LinkedList<Polyomino> l = new LinkedList<Polyomino>();
+			l.add(p);
+
+			Polyomino poly = Polyomino.expand(p, k, primes);
+			int[][] origin = new int[poly.cases.size()][2];
+			int[][] M =Cover.toExactCoverFree(l, poly,origin, primes);
+			LinkedList<LinkedList<LinkedList<Integer>>> sol=DancingLinks.exactCover(DancingLinks.init(M));
+			if(sol.size()!=0){
+				compteur++;
+				result.add(p);
+			}
+		}
+		System.out.println("Il y a " +compteur + " Polyonimos de taille "+n+" qui pavent leur "+k+"-dilatation.");
+		Image2D frame= new Image2D(width,height);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		Polyomino.displayPolyominos(result, frame, size, Color.BLACK, primes);
+	}
 	
 }
 

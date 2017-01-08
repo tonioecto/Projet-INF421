@@ -101,7 +101,7 @@ public class Main {
 
 		//expandNK(8,4);
 		//fixed(7);
-		test81();
+		testRectangle();
 
 		
 	}
