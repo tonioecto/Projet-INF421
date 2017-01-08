@@ -30,10 +30,10 @@ public class Test {
 		//generateFreeV2(5);   //Arguments : n
 		
 		//generateFixedPrintV2(5, 30);   //Arguments : n,size 
-		//generateFreePrintV2(5, 30);   //Arguments : n,size
+		//generateFreePrintV2(5, 40);   //Arguments : n,size
 		
 		//compareFixed(8);   // Argument : n
-		compareFree(8);   // Argument : n
+		//compareFree(8);   // Argument : n
 		
 		
 		// Question 4
@@ -44,10 +44,10 @@ public class Test {
 		//tilings2(60);  // Argument : size
 		//tilings3(60);  // Argument : size
 		
-		//rectangleFree(5,20,3,60);  //Arguments : n, longueur, largeur, size  
+		//rectangleFree(5,10,6,60);  //Arguments : n, longueur, largeur, size  
 		//rectangleFixed(4,3,4,60);  //Arguments : n, longueur, largeur, size 
 		
-		//expandNK(8,4,40);  //Arguments : n, k, size 
+		expandNK(8,4,50);  //Arguments : n, k, size 
 		
 		
 		
@@ -195,7 +195,7 @@ public class Test {
 
 		Image2D frame= new Image2D(width,height);
 		Image2dViewer test2 = new Image2dViewer(frame);
-		Polyomino.displayPolyominos(L, frame, 30, Color.black, new int[] {0,0});
+		Polyomino.displayPolyominos(L, frame, size, Color.black, new int[] {0,0});
 	}
 	
 	public static void generateFreePrintV1(int n, int size){ //Génère les Polyominos libres de taille n de manière optimisée
@@ -211,7 +211,7 @@ public class Test {
 
 		Image2D frame= new Image2D(width,height);
 		Image2dViewer test2 = new Image2dViewer(frame);
-		Polyomino.displayPolyominos(L, frame, 30, Color.black, new int[] {0,0});
+		Polyomino.displayPolyominos(L, frame, size, Color.black, new int[] {0,0});
 	}
 	
 	
@@ -256,7 +256,7 @@ public class Test {
 
 		Image2D frame= new Image2D(width,height);
 		Image2dViewer test2 = new Image2dViewer(frame);
-		Polyomino.displayPolyominos(L, frame, 30, Color.black, new int[] {0,0});
+		Polyomino.displayPolyominos(L, frame, size, Color.black, new int[] {0,0});
 	}
 	
 	public static void generateFreePrintV2(int n, int size){ //Génère les Polyominos fixes de taille n de manière optimisée
@@ -272,7 +272,7 @@ public class Test {
 
 		Image2D frame= new Image2D(width,height);
 		Image2dViewer test2 = new Image2dViewer(frame);
-		Polyomino.displayPolyominos(L, frame, 30, Color.black, new int[] {0,0});
+		Polyomino.displayPolyominos(L, frame, size, Color.black, new int[] {0,0});
 	}
 	
 	public static void compareFixed(int n){ //Compare les performances des 2 implémentations de génération des Polyominos fixés
@@ -470,7 +470,7 @@ public class Test {
 		
 	}
 	
-	public static void rectangleFixed(int n, int longueur, int largeur, int size){ //Trouve tous les pavages d'un rectangle par des polyominos fixes de taille n, sans répétition, en comptant les symétries. (Diviser par 4 pour le nombre de solutions uniques)
+	public static void rectangleFixed(int n, int longueur, int largeur, int size){ //Trouve tous les pavages d'un rectangle par des polyominos fixes de taille n, sans répétition
 		
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int height = (int)dimension.getHeight();

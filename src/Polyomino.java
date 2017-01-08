@@ -371,13 +371,6 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 		}
 	}
 
-	public static void displayPolyominosSym(LinkedList<Polyomino> poly, Image2D frame, int size, Color color, int[] primes) { // on affiche le symétrique d'une liste de Polyomino
-		int[] pointeur = new int[] { 1, 0 };
-		for (Polyomino p : poly) {
-			displayPolyomino(p.reflection(false, primes), size, frame, color, pointeur);
-			pointeur[0] += p.width + 2;
-		}
-	}
 
 	public static boolean equalsFixed(Polyomino a, Polyomino b) { // On vérifie si 2 Polyomino sont strictement égaux
 		return a.key == b.key;
