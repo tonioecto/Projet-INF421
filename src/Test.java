@@ -47,7 +47,7 @@ public class Test {
 		//rectangleFree(5,10,6,60);  //Arguments : n, longueur, largeur, size  
 		//rectangleFixed(4,3,4,60);  //Arguments : n, longueur, largeur, size 
 		
-		expandNK(8,4,50);  //Arguments : n, k, size 
+		expandNK(8,4,30);  //Arguments : n, k, size 
 		
 		
 		

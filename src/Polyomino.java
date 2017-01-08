@@ -699,7 +699,8 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 		return result;
 	}
 	
-	public int freeKey(int[] primes){
+	
+	public int freeKey(int[] primes){  // On calcule la key d'un POlyomino libre (la key minimal de tous les fixes qui en découle)
 		int minKey=this.key;
 		
 		this.rotate(true,primes);
