@@ -99,7 +99,8 @@ public class Main {
 
 
 
-		expandNK(8,4);
+		testSudo();
+		
 		
 
 		
@@ -477,7 +478,7 @@ public class Main {
 		
 	}
 	
-	public static void testRectangle(){  //Trouve tous les pavages par des free pentaminoes, sans répétition, en comptant les symétries. (Diviser par 4 pour le nombre de solutions uniques)
+	public static void testRectangle(){  //Trouve tous les pavages par des free pentaminoes, sans rï¿½pï¿½tition, en comptant les symï¿½tries. (Diviser par 4 pour le nombre de solutions uniques)
 		
 		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
 
@@ -518,7 +519,7 @@ public class Main {
 		
 	}
 	
-	public static void testRectangle2(){  //Trouve tous les pavages par des fixed pentaminoes, avec répétition, en comptant les symétries. (Diviser par 4 pour le nombre de solutions uniques)
+	public static void testRectangle2(){  //Trouve tous les pavages par des fixed pentaminoes, avec rï¿½pï¿½tition, en comptant les symï¿½tries. (Diviser par 4 pour le nombre de solutions uniques)
 		
 		Color[] color = new Color[]{Color.BLUE, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.ORANGE, Color.PINK, Color.RED, Color.YELLOW};
 		
@@ -583,6 +584,10 @@ public class Main {
 		}
 		System.out.println(compteur);
 
+	}
+	public static void testSudo(){
+		int[][] sudoku= new int[][]{{0,3,7,0,0,0,9,5,0},{0,0,5,7,2,0,0,0,4},{0,0,4,0,0,1,7,0,2},{0,0,1,0,0,7,0,0,3},{4,6,0,3,0,5,0,7,9},{9,0,0,6,0,0,8,0,0},{7,0,6,2,0,0,4,0,0},{5,0,0,0,7,4,3,0,0},{0,4,9,0,0,0,5,2,0}};
+		DancingLinks.sudokuSolver(sudoku);
 	}
 	
 	public static void test(){
