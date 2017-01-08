@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -617,7 +618,7 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 		return res;
 	}
 
-	public static LinkedList<Polyomino> fixed(int n, int[] primes) {  // On énumère efficacement toues les Polyominos fixes de taille n
+	public static LinkedList<Polyomino> fixed(int n, int[] primes) {  // On énumère efficacement toutes les Polyominos fixes de taille n
 		int[][] table = new int[2 * n + 4][n + 4];
 		for (int i = 0; i < n; i++) {
 			table[i][0] = 1;
@@ -685,25 +686,20 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 	public static LinkedList<Polyomino> free(int n, int[] primes) {  // On énumère efficacement tous les polyomino libres
 		LinkedList<Polyomino> list = fixed(n, primes);
 		LinkedList<Polyomino> result = new LinkedList<Polyomino>();
+		
+		
+	    HashMap<Integer, Polyomino> M = new HashMap<Integer, Polyomino>();
+		
 		for (Polyomino p : list) {
 			p.recentre(primes);
-			if (result.isEmpty()) {
-				result.add(p);
-			} else {
-				boolean a = true;
-				for (Polyomino po : result) {
-					if (equalsFree(po, p, primes)) {
-						a = false;
-					}
-				}
-				if (a) {
-					result.add(p);
-				}
-			}
+			M.put(p.key, p);
 		}
+			
+			Collection<Polyomino> C = M.values();
 
-		for (Polyomino p2 : result) {
+		for (Polyomino p2 : C) {
 			p2.recentre(primes);
+			result.add(p2);
 		}
 		return result;
 	}
