@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 
-public class ColoredCases {
+public class ColoredCases {   // Dans la représentation graphique, chaque case est un rectangle
 
 	Rectangle rectangle;
 	Color color;

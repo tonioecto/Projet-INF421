@@ -1,4 +1,4 @@
-	public class Case{
+	public class Case{  // On caractérise une case d'un Polyomino par son abscisse et son ordonnée
 		int abscisse;
 		int ordonnee;
 		
