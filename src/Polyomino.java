@@ -464,7 +464,6 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 			result.add(p);
 		} else {
 			LinkedList<Polyomino> stock = genFixed(n - 1, primes);
-			// result=genFixed(n-1);
 			for (Polyomino po : stock) {
 				Polyomino p = po.copy(primes);
 
@@ -534,7 +533,6 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 			result.add(p);
 		} else {
 			LinkedList<Polyomino> stock = genFree(n - 1, primes);
-			// result=genFixed(n-1);
 			for (Polyomino po : stock) {
 				Polyomino p = po.copy(primes);
 
@@ -585,7 +583,7 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 		return result;
 	}
 
-	// debut de la question 3
+	// Task3
 	public static LinkedList<Polyomino> add(LinkedList<Polyomino> a, LinkedList<Polyomino> b) {  // On concatène 2 LinkedLists
 		for (Polyomino p : a) {
 			b.add(p);
@@ -749,7 +747,7 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 
 	}
 
-	public static LinkedList<Integer> copyInt(LinkedList<Integer> l) {
+	public static LinkedList<Integer> copyInt(LinkedList<Integer> l) {// fonction pour faire des copies de LinkedList
 		LinkedList<Integer> result = new LinkedList<Integer>();
 		for (int j : l) {
 			result.add(j);
@@ -757,7 +755,7 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 		return result;
 	}
 
-	public static LinkedList<LinkedList<Integer>> copyList(LinkedList<LinkedList<Integer>> l) {
+	public static LinkedList<LinkedList<Integer>> copyList(LinkedList<LinkedList<Integer>> l) {//fonction de copie
 		LinkedList<LinkedList<Integer>> result = new LinkedList<LinkedList<Integer>>();
 		for (LinkedList<Integer> i : l) {
 			result.add(copyInt(i));
@@ -765,8 +763,7 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 		return result;
 	}
 
-	public static LinkedList<LinkedList<LinkedList<Integer>>> exactCover(LinkedList<Integer> a, int[][] m,
-			LinkedList<LinkedList<Integer>> c) {
+	public static LinkedList<LinkedList<LinkedList<Integer>>> exactCover(LinkedList<Integer> a, int[][] m,LinkedList<LinkedList<Integer>> c) {//fonction qui réalise l'exact cover
 		if (a == null || a.size() == 0) {
 			LinkedList<LinkedList<LinkedList<Integer>>> p = new LinkedList<LinkedList<LinkedList<Integer>>>();
 			p.add(new LinkedList<LinkedList<Integer>>());

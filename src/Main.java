@@ -89,9 +89,9 @@ public class Main {
 		int[][] m=new int[][] {{1,1,0},{0,1,1},{1,0,1},{1,0,0},{0,1,0},{0,0,1}};
 		LinkedList<LinkedList<LinkedList<Integer>>> k=Polyomino.exactCover(a, m, h);
 		LinkedList<LinkedList<LinkedList<Integer>>> k1=DancingLinks.exactCover(DancingLinks.init(m));
-//		for (LinkedList<LinkedList<Integer>> l:k1){
-//			System.out.println(l);
-//		}
+		for (LinkedList<LinkedList<Integer>> l:k1){
+			System.out.println(l);
+		}
 		
 	
 		
@@ -101,7 +101,7 @@ public class Main {
 
 		//expandNK(8,4);
 		//fixed(7);
-		testRectangle();
+		///testRectangle();
 
 		
 	}
