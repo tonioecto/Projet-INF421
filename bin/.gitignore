@@ -1,8 +1,9 @@
 /Case.class
 /ColoredCases.class
-/Polyomino.class
 /ColoredPixels.class
 /ColoredPolygon.class
+/DancingLinks.class
+/Data.class
 /Edge.class
 /Image2D.class
 /Image2dComponent.class
