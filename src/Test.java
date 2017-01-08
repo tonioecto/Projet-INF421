@@ -27,13 +27,13 @@ public class Test {
 		
 		// Question 3
 		//generateFixedV2(5);   //Arguments : n
-		//generateFreeV2(5);   //Arguments : n
+		//generateFreeV2(15);   //Arguments : n
 		
 		//generateFixedPrintV2(5, 30);   //Arguments : n,size 
 		//generateFreePrintV2(5, 40);   //Arguments : n,size
 		
 		//compareFixed(8);   // Argument : n
-		//compareFree(8);   // Argument : n
+		compareFree(8);   // Argument : n
 		
 		
 		// Question 4
@@ -47,7 +47,7 @@ public class Test {
 		//rectangleFree(5,10,6,60);  //Arguments : n, longueur, largeur, size  
 		//rectangleFixed(4,3,4,60);  //Arguments : n, longueur, largeur, size 
 		
-		expandNK(8,4,30);  //Arguments : n, k, size 
+		//expandNK(8,4,30);  //Arguments : n, k, size 
 		
 		
 		
