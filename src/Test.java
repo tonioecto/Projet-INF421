@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Test {
@@ -21,34 +22,46 @@ public class Test {
 		//generateFixedV1(5);   //Arguments : n
 		//generateFreeV1(5);   //Arguments : n
 		
-		//generateFixedPrintV12(5, 30);   //Arguments : n,size 
+		//generateFixedPrintV1(5, 30);   //Arguments : n,size 
 		//generateFreePrintV1(5, 30);   //Arguments : n,size
 		
 		
 		// Question 3
 		//generateFixedV2(5);   //Arguments : n
-		//generateFreeV2(15);   //Arguments : n
+		//generateFreeV2(5);   //Arguments : n
 		
 		//generateFixedPrintV2(5, 30);   //Arguments : n,size 
 		//generateFreePrintV2(5, 40);   //Arguments : n,size
 		
+
 		//compareFixed(8);   // Argument : n
-		compareFree(8);   // Argument : n
+		//compareFree(8);   // Argument : n
+
 		
 		
 		// Question 4
+		//allSizeSubsets(2,6); //Arguments : k,n
+		//allSubsets(5); //Arguments : n
 		
+		//Question 6
+		//dancingExample1();
+		//dancingAllSizeSubsets(2,6); //Arguments : k,n
+		//dancingAllSubsets(5); //Arguments : n
 		
 		// Question 8
-		//tilings1(60);  // Argument : size
+		tilings1(60);  // Argument : size
 		//tilings2(60);  // Argument : size
 		//tilings3(60);  // Argument : size
+		//tilingsX(60);  //Argument : size
 		
 		//rectangleFree(5,10,6,60);  //Arguments : n, longueur, largeur, size  
-		//rectangleFixed(4,3,4,60);  //Arguments : n, longueur, largeur, size 
+		//rectangleFixed(4,6,4,60);  //Arguments : n, longueur, largeur, size 
 		
-		//expandNK(8,4,30);  //Arguments : n, k, size 
+		expandNK(8,4,30);  //Arguments : n, k, size 
 		
+		//Question 11
+		//testSudo(); 
+
 		
 		
 	}
@@ -155,7 +168,7 @@ public class Test {
 	
 	//Question 2
 	
-	public static void generateFixedV1(int n){ //Génère les Polyominos fixes de taille n de manière optimisée
+	public static void generateFixedV1(int n){ //Génère les Polyominos fixes de taille n de manière "naive"
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int height = (int)dimension.getHeight();
 		int width  = (int)dimension.getWidth();
@@ -168,7 +181,7 @@ public class Test {
 
 	}
 	
-	public static void generateFreeV1(int n){ //Génère les Polyominos libres de taille n de manière optimisée
+	public static void generateFreeV1(int n){ //Génère les Polyominos libres de taille n de manière "naive"
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int height = (int)dimension.getHeight();
 		int width  = (int)dimension.getWidth();
@@ -181,7 +194,7 @@ public class Test {
 
 	}
 	
-	public static void generateFixedPrintV1(int n, int size){ //Génère les Polyominos fixes de taille n de manière optimisée
+	public static void generateFixedPrintV1(int n, int size){ //Génère les Polyominos fixes de taille n de manière "naive"
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int height = (int)dimension.getHeight();
 		int width  = (int)dimension.getWidth();
@@ -198,7 +211,7 @@ public class Test {
 		Polyomino.displayPolyominos(L, frame, size, Color.black, new int[] {0,0});
 	}
 	
-	public static void generateFreePrintV1(int n, int size){ //Génère les Polyominos libres de taille n de manière optimisée
+	public static void generateFreePrintV1(int n, int size){ //Génère les Polyominos libres de taille n de manière "naive"
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int height = (int)dimension.getHeight();
 		int width  = (int)dimension.getWidth();
@@ -217,7 +230,7 @@ public class Test {
 	
 	// Question 3
 	
-	public static void generateFixedV2(int n){ //Génère les Polyominos fixes de taille n de manière "naïve"
+	public static void generateFixedV2(int n){ //Génère les Polyominos fixes de taille n de manière optimisee
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int height = (int)dimension.getHeight();
 		int width  = (int)dimension.getWidth();
@@ -243,7 +256,7 @@ public class Test {
 
 	}
 	
-	public static void generateFixedPrintV2(int n, int size){ //Génère les Polyominos fixes de taille n de manière "naïve"
+	public static void generateFixedPrintV2(int n, int size){ //Génère les Polyominos fixes de taille n de manière optimisee
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int height = (int)dimension.getHeight();
 		int width  = (int)dimension.getWidth();
@@ -310,6 +323,120 @@ public class Test {
 
 	}
 	
+	// Question 4
+	
+
+	
+	
+
+	
+	public static void allSizeSubsets(int k,int n){  // Résoud le problème d'Exact Cover pour tous les subsets de taille k d'un Ground Set de taille n
+		LinkedList<Integer> list=new LinkedList<Integer>();
+		for (int i=0;i<n;i++){list.add(i+1);}
+		LinkedList<LinkedList<Integer>> l=subsets(k,list);
+		//System.out.println("Il y a "+l.size()+ " subsets de taille "+k);
+		int[][] m = new int[l.size()][n];
+		int compteur=0;
+		while(l.size()!=0){
+			LinkedList<Integer> a=l.pop();
+			while (a.size()!=0){
+				int i=a.pop();
+				m[compteur][i-1]=1;
+			}
+			compteur ++;
+		}
+		LinkedList<Integer> L=new LinkedList<Integer>();
+		for (int i=0;i<n;i++){L.add(i+1);}
+		LinkedList<Integer> L1=new LinkedList<Integer>();
+		for (int i=0;i<n;i++){L1.add(i+1);}
+		
+		LinkedList<LinkedList<LinkedList<Integer>>> o=Cover.exactCover(L1, m, subsets(k,L));
+		for (LinkedList<LinkedList<Integer>> u:o){
+			System.out.println(u);
+		}
+		
+	}
+	public static void allSubsets(int n){ // Résoud le problème d'Exact Cover pour tous les subsets d'un Ground Set de taille n
+		int[][] m= new int[(int)Math.pow((double)2,(double) n)][n];
+		LinkedList<LinkedList<Integer>> L=new LinkedList<LinkedList<Integer>>();
+		int compteur=0;
+		for (int k=1;k<=n;k++){
+			LinkedList<Integer> list=new LinkedList<Integer>();
+			for (int i=0;i<n;i++){list.add(i+1);}
+			LinkedList<LinkedList<Integer>> l=subsets(k,list);
+			L.addAll(l);
+			while(l.size()!=0){
+				LinkedList<Integer> a=l.pop();
+				while (a.size()!=0){
+					int i=a.pop();
+					m[compteur][i-1]=1;
+				}
+				compteur ++;
+			}
+		}
+		LinkedList<Integer> L1=new LinkedList<Integer>();
+		for (int i=0;i<n;i++){L1.add(i+1);}
+		LinkedList<LinkedList<LinkedList<Integer>>> o=Cover.exactCover(L1, m, L);
+		for (LinkedList<LinkedList<Integer>> u:o){
+			System.out.println(u);}
+	}
+	
+	//Question 6
+	public static void dancingExample1(){  // Resoud grâce aux Dancing Links l'exemple donné dans l'énoncé
+			int[][] M = new int[][] {{0,0,1,0,1,1,0},{1,0,0,1,0,0,1},{0,1,1,0,0,1,0},{1,0,0,1,0,0,0},{0,1,0,0,0,0,1},{0,0,0,1,1,0,1}};
+			Data H = DancingLinks.init(M);
+			LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+			for (LinkedList<LinkedList<Integer>> l:k){
+				System.out.println(l);
+			}
+	}
+	
+	public static void dancingAllSizeSubsets(int k, int n){ // Résoud le problème d'Exact Cover pour tous les subsets de taille k d'un Ground Set de taille n, en utilisant des Dancing Links
+		LinkedList<Integer> list=new LinkedList<Integer>();
+		for (int i=0;i<n;i++){list.add(i+1);}
+		LinkedList<LinkedList<Integer>> l=subsets(k,list);
+		int[][] m = new int[l.size()][n];
+		int compteur=0;
+		while(l.size()!=0){
+			LinkedList<Integer> a=l.pop();
+			while (a.size()!=0){
+				int i=a.pop();
+				m[compteur][i-1]=1;
+			}
+			compteur ++;
+		}
+		Data H = DancingLinks.init(m);
+		LinkedList<LinkedList<LinkedList<Integer>>> o=DancingLinks.exactCover(DancingLinks.init(m));
+		for (LinkedList<LinkedList<Integer>> u:o){
+			System.out.println(u);
+		}
+	}
+	public static void dancingAllSubsets(int n){ // Résoud le problème d'Exact Cover pour tous les subsets d'un Ground Set de taille n, en utilisant des Dancing Links
+		int[][] m= new int[(int)Math.pow((double)2,(double) n)][n];
+		LinkedList<LinkedList<Integer>> L=new LinkedList<LinkedList<Integer>>();
+		int compteur=0;
+		for (int k=1;k<=n;k++){
+			LinkedList<Integer> list=new LinkedList<Integer>();
+			for (int i=0;i<n;i++){list.add(i+1);}
+			LinkedList<LinkedList<Integer>> l=subsets(k,list);
+			L.addAll(l);
+			while(l.size()!=0){
+				LinkedList<Integer> a=l.pop();
+				while (a.size()!=0){
+					int i=a.pop();
+					m[compteur][i-1]=1;
+				}
+				compteur ++;
+			}
+		}
+		Data H = DancingLinks.init(m);
+		LinkedList<LinkedList<LinkedList<Integer>>> o=DancingLinks.exactCover(DancingLinks.init(m));
+		//System.out.println(o.size());
+		for (LinkedList<LinkedList<Integer>> u:o){
+			System.out.println(u);
+		}
+
+	}
 	
 	//Question 8
 	
@@ -321,7 +448,8 @@ public class Test {
 		
 		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
 
-		Polyomino poly = new Polyomino("[(0,0), (1,0),(0,1),(1,1),(2,1),(3,1),(0,2),(1,2),(2,2),(3,2),(4,2),(5,2),(0,3),(1,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(0,4),(1,4),(2,4),(3,4),(4,4),(5,4),(6,4),(7,4),(8,4),(9,4),(1,5),(2,5),(3,5),(4,5),(5,5),(6,5),(7,5),(8,5),(9,5),(10,5),(3,6),(4,6),(5,6),(6,6),(7,6),(8,6),(9,6),(10,6),(5,7),(6,7),(7,7),(8,7),(9,7),(10,7),(7,8),(8,8),(9,8),(10,8),(9,9),(10,9)]",primes);
+		//Polyomino poly = new Polyomino("[(0,0), (1,0),(0,1),(1,1),(2,1),(3,1),(0,2),(1,2),(2,2),(3,2),(4,2),(5,2),(0,3),(1,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(0,4),(1,4),(2,4),(3,4),(4,4),(5,4),(6,4),(7,4),(8,4),(9,4),(1,5),(2,5),(3,5),(4,5),(5,5),(6,5),(7,5),(8,5),(9,5),(10,5),(3,6),(4,6),(5,6),(6,6),(7,6),(8,6),(9,6),(10,6),(5,7),(6,7),(7,7),(8,7),(9,7),(10,7),(7,8),(8,8),(9,8),(10,8),(9,9),(10,9)]",primes);
+		Polyomino poly = Polyomino.Rectangle(10, 6, primes);
 		
 		LinkedList<Polyomino> L = Polyomino.genFree(5, primes);
 		
@@ -423,6 +551,49 @@ public class Test {
 			}
 
 	}
+	
+	public static void tilingsX(int size){  //Pave un Polyomino en X. On autorise les répétitions
+		
+		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int height = (int)dimension.getHeight();
+		int width  = (int)dimension.getWidth();
+		
+		int[] primes = Polyomino.initPrimes("Primes.txt",3000);
+
+		Polyomino poly = new Polyomino("[1,0,10,0,0,1,1,1,2,1,9,1,10,1,11,1,1,2,2,2,3,2,8,2,9,2,10,2,2,3,3,3,4,3,7,3,8,3,9,3,3,4,4,4,5,4,6,4,7,4,8,4,4,5,5,5,6,5,7,5,4,6,5,6,6,6,7,6,3,7,4,7,5,7,6,7,7,7,8,7,2,8,3,8,4,8,7,8,8,8,9,8,1,9,2,9,3,9,8,9,9,9,10,9,0,10,1,10,2,10,9,10,10,10,11,10,1,11,10,11]",primes);
+		
+		LinkedList<Polyomino> L = Polyomino.fixed(5, primes);
+		
+		System.out.println("Nombre de Polyominos : "+L.size());
+
+
+		
+		
+		int[][] origin = new int[poly.cases.size()][2];
+		
+		int[][] M =Cover.toExactCover(L, poly,origin);
+		
+		
+
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(M));
+		
+		System.out.println("Nombre de solutions : "+k.size());
+		
+		Image2D frame= new Image2D(width,height);
+		Image2dViewer test2 = new Image2dViewer(frame); 
+		
+		LinkedList<LinkedList<Integer>> l = k.pop();
+		l = k.pop();
+		l = k.pop();
+		l = k.pop();
+		l = k.pop();
+		l = k.pop();
+			for(LinkedList<Integer> m:l){
+				Polyomino.displayPolyomino(Cover.toPolyomino(m, primes, origin), size, frame, Color.black, new int[] {0,0});
+			}
+		
+	}
+	
 
 	
 	public static void rectangleFree(int n, int longueur, int largeur, int size){  //Trouve tous les pavages d'un rectangle par des polyominos libres de taille n, sans répétition, en comptant les symétries. (Diviser par 4 pour le nombre de solutions uniques)
@@ -546,6 +717,43 @@ public class Test {
 		Polyomino.displayPolyominos(result, frame, size, Color.BLACK, primes);
 	}
 	
+	//Question 11
+	public static void testSudo(){//Fait un test de résolution de sudoku, la première grille affichée est le sudoku incomplet et la seconde grille est la solution
+		int[][] sudoku= new int[][]{{0,3,7,0,0,0,9,5,0},{0,0,5,7,2,0,0,0,4},{0,0,4,0,0,1,7,0,2},{0,0,1,0,0,7,0,0,3},{4,6,0,3,0,5,0,7,9},{9,0,0,6,0,0,8,0,0},{7,0,6,2,0,0,4,0,0},{5,0,0,0,7,4,3,0,0},{0,4,9,0,0,0,5,2,0}};
+		int[][] sudo= DancingLinks.sudokuSolver(sudoku);
+		System.out.println("Sudoku incomplet :");
+		for (int i=0;i<9;i++){
+			System.out.println(Arrays.toString(sudoku[i]));
+		}
+		System.out.println();
+		System.out.println("Sudoku résolu :");
+		for (int i=0;i<9;i++){
+			System.out.println(Arrays.toString(sudo[i]));
+		}
+	}
+	
+	
+	//fonction annexe qui calcule tous les subsets de taille k d'un ensemple list
+	public static LinkedList<LinkedList<Integer>> subsets(int k,LinkedList<Integer> list){
+		LinkedList<LinkedList<Integer>> l=new LinkedList<LinkedList<Integer>>();
+		if (k==1 ) for (int i:list){LinkedList<Integer> a=new LinkedList<Integer>();a.add(i); l.add(a);}
+		else {
+			LinkedList<Integer> m=new LinkedList<Integer>();
+			for (int i:list){m.add(i);}
+			for (Integer i:m){
+				list.remove(i);
+				LinkedList<Integer> p=new LinkedList<Integer>();
+				for (int j:list){p.add(j);}
+				LinkedList<LinkedList<Integer>> L=subsets(k-1,p);
+				for (LinkedList<Integer> v:L){
+					v.add(i);
+					l.add(v);
+				}
+ 			}
+			
+		}
+		return l;
+	}
 }
 
 	

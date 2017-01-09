@@ -464,7 +464,6 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 			result.add(p);
 		} else {
 			LinkedList<Polyomino> stock = genFixed(n - 1, primes);
-			// result=genFixed(n-1);
 			for (Polyomino po : stock) {
 				Polyomino p = po.copy(primes);
 
@@ -534,7 +533,6 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 			result.add(p);
 		} else {
 			LinkedList<Polyomino> stock = genFree(n - 1, primes);
-			// result=genFixed(n-1);
 			for (Polyomino po : stock) {
 				Polyomino p = po.copy(primes);
 
@@ -585,7 +583,7 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 		return result;
 	}
 
-	// debut de la question 3
+	// Task3
 	public static LinkedList<Polyomino> add(LinkedList<Polyomino> a, LinkedList<Polyomino> b) {  // On concatène 2 LinkedLists
 		for (Polyomino p : a) {
 			b.add(p);
@@ -737,82 +735,7 @@ public class Polyomino { // Pas de nï¿½gatif, tout est centrï¿½
 	
 	
 
-	// Task 4
-	public static int[][] copy(int[][] m) {  // On copie 
-		int[][] result = new int[m.length][m[0].length];
-		for (int i = 0; i < m.length; i++) {
-			for (int j = 0; j < m[0].length; j++) {
-				result[i][j] = m[i][j];
-			}
-		}
-		return result;
 
-	}
-
-	public static LinkedList<Integer> copyInt(LinkedList<Integer> l) {
-		LinkedList<Integer> result = new LinkedList<Integer>();
-		for (int j : l) {
-			result.add(j);
-		}
-		return result;
-	}
-
-	public static LinkedList<LinkedList<Integer>> copyList(LinkedList<LinkedList<Integer>> l) {
-		LinkedList<LinkedList<Integer>> result = new LinkedList<LinkedList<Integer>>();
-		for (LinkedList<Integer> i : l) {
-			result.add(copyInt(i));
-		}
-		return result;
-	}
-
-	public static LinkedList<LinkedList<LinkedList<Integer>>> exactCover(LinkedList<Integer> a, int[][] m,
-			LinkedList<LinkedList<Integer>> c) {
-		if (a == null || a.size() == 0) {
-			LinkedList<LinkedList<LinkedList<Integer>>> p = new LinkedList<LinkedList<LinkedList<Integer>>>();
-			p.add(new LinkedList<LinkedList<Integer>>());
-			return p;
-		} else {
-			int x = a.getFirst();
-			LinkedList<LinkedList<LinkedList<Integer>>> p = new LinkedList<LinkedList<LinkedList<Integer>>>();
-			for (int i = 0; i < m.length; i++) {
-				LinkedList<Integer> s = new LinkedList<Integer>();
-				if (m[i][x - 1] == 1) {
-					// for S, xeS
-					LinkedList<Integer> a1 = copyInt(a);
-					LinkedList<LinkedList<Integer>> c1 = copyList(c);
-					int[][] m1 = copy(m);
-					for (int j = 0; j < m[i].length; j++) {
-						if (m[i][j] == 1) {
-							// for y , yeS
-							s.add(j + 1);
-							Integer y = new Integer(j + 1);
-							a1.remove(y);
-							for (int k = 0; k < m.length; k++) {
-								if (m[k][j] == 1) {
-									// for T, yeT
-									LinkedList<Integer> b = new LinkedList<Integer>();
-									for (int l = 0; l < m[k].length; l++) {
-										if (m[k][l] == 1) {
-											// for l, leT
-											b.add(l + 1);
-											m1[k][l] = 0;
-										}
-									}
-									c1.remove(b);
-								}
-							}
-							m1[i][j] = 0;
-						}
-					}
-					for (LinkedList<LinkedList<Integer>> p1 : exactCover(a1, m1, c1)) {
-						p1.add(s);
-						p.add(p1);
-					}
-				}
-			}
-			return p;
-		}
-	}
 
 
 }
