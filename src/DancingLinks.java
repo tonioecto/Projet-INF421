@@ -150,4 +150,79 @@ public class DancingLinks { // Dans cette classe, on trouve les fonctions
 			return p;
 		}
 	}
+	
+	public static boolean testCarre(int i, int j){//test si les deux éléments sont dans le même cube
+		if ((i<=3 && i>0) && (j<=3 && j>0)){return false;}
+		else if ((i>=7||i==0) && (j>=7||j==0) )return false;
+		else if ((i>3 && i<7) && (j<7 && j>3)) return false;
+		else return true;}
+
+	public static boolean test(LinkedList<Integer> l,int j){// test si on peut rajouter le chiffre j dans la liste l : donc regarde si j n'est pas dans la même colonne/ligne/cube qu'un des éléments de l
+		if (l.size()==0 ){return true;}
+		int a=l.pop();
+		boolean res= ((a-1)/9!=(j-1)/9 && a%9!=j%9 && !((a-1)/27==(j-1)/27 &&!testCarre(a%9,j%9)))&&test(l,j);
+		l.add(a);
+		return res;
+	}
+	
+	public static void build(LinkedList<Integer> a,LinkedList<LinkedList<Integer>> l,int[] ligne,int compt,int[][] sudoku){//construit la liste des configurations possibles pour chaque chiffre
+		if (a.size()==9){
+			l.add(Polyomino.copyInt(a)); 
+		}
+		else {
+			while (ligne[compt]==1){compt++;}
+			for (int k=1;k<=9;k++){
+				if (test(a,compt*9+k)&& sudoku[compt][k-1]==0){
+					LinkedList<Integer> copy=Polyomino.copyInt(a);
+					copy.add(compt*9+k);
+					build(copy,l,ligne,compt+1,sudoku);
+					}
+			}
+		}
+	}
+	
+	public static int[][] sudokuSolver(int[][] sudoku){//resoud le sudoku donné en argument
+		int[][] resultat=new int[9][9];
+		//initialisation de la grille de exact cover pour sudoku
+		LinkedList<LinkedList<Integer>> l=new LinkedList<LinkedList<Integer>>();
+		int[] marqueur=new int[9];
+		for (int i=1;i<=9;i++){
+			LinkedList<Integer> a=new LinkedList<Integer>();
+			int[] ligne=new int[9];
+			for (int j=0;j<9;j++){
+				for (int k=0;k<9;k++){
+					if (sudoku[j][k]==i){ligne[j]=1;a.add(j*9+k+1);marqueur[i-1]=j*9+k+1;}
+				}
+			}
+			build(a,l,ligne,0,sudoku);
+		}
+		int[][] m=new int[l.size()][81];
+		int compteur =0;
+		while (l.size()!=0){
+			LinkedList<Integer> a=l.pop();
+			for (int i=0;i<9;i++){
+				int k=a.pop();
+				m[compteur][k-1]=1;	
+				}
+			compteur ++;
+		}
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(m));
+		if (k.size()==0){System.out.println("pas de resultat");return resultat;}
+		else {LinkedList<LinkedList<Integer>> sol=k.pop();
+			while(sol.size()!=0){
+				LinkedList<Integer> num=sol.pop();
+				for (int i=0;i<9;i++){
+					for (int j=0;j<9;j++){
+						if (marqueur[i]==num.get(j)+1){
+							for (int o=0;o<9;o++){
+								int e=num.get(o);
+								resultat[(e)/9][(e)%9]=i+1;
+							}
+						}
+					}
+				}
+			}
+			return resultat;}
+	}
+	
 }

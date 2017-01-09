@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Test {
@@ -54,7 +55,7 @@ public class Test {
 		//rectangleFixed(4,3,4,60);  //Arguments : n, longueur, largeur, size 
 		
 		//expandNK(8,4,30);  //Arguments : n, k, size 
-		
+		//testSudo(); 
 		
 		
 	}
@@ -321,26 +322,7 @@ public class Test {
 
 	
 	
-	public static LinkedList<LinkedList<Integer>> subsets(int k,LinkedList<Integer> list){
-		LinkedList<LinkedList<Integer>> l=new LinkedList<LinkedList<Integer>>();
-		if (k==1 ) for (int i:list){LinkedList<Integer> a=new LinkedList<Integer>();a.add(i); l.add(a);}
-		else {
-			LinkedList<Integer> m=new LinkedList<Integer>();
-			for (int i:list){m.add(i);}
-			for (Integer i:m){
-				list.remove(i);
-				LinkedList<Integer> p=new LinkedList<Integer>();
-				for (int j:list){p.add(j);}
-				LinkedList<LinkedList<Integer>> L=subsets(k-1,p);
-				for (LinkedList<Integer> v:L){
-					v.add(i);
-					l.add(v);
-				}
- 			}
-			
-		}
-		return l;
-	}
+
 	
 	public static void allSizeSubsets(int k,int n){
 		LinkedList<Integer> list=new LinkedList<Integer>();
@@ -444,9 +426,9 @@ public class Test {
 		Data H = DancingLinks.init(m);
 		LinkedList<LinkedList<LinkedList<Integer>>> o=DancingLinks.exactCover(DancingLinks.init(m));
 		System.out.println(o.size());
-//		for (LinkedList<LinkedList<Integer>> u:o){
-//			System.out.println(u);
-//		}
+		for (LinkedList<LinkedList<Integer>> u:o){
+			System.out.println(u);
+		}
 
 	}
 	
@@ -685,6 +667,41 @@ public class Test {
 		Polyomino.displayPolyominos(result, frame, size, Color.BLACK, primes);
 	}
 	
+	//Question 11
+	public static void testSudo(){//Fait un test de résolution de sudoku, la première grille affichée est le sudoku incomplet et la seconde grille est la solution
+		int[][] sudoku= new int[][]{{0,3,7,0,0,0,9,5,0},{0,0,5,7,2,0,0,0,4},{0,0,4,0,0,1,7,0,2},{0,0,1,0,0,7,0,0,3},{4,6,0,3,0,5,0,7,9},{9,0,0,6,0,0,8,0,0},{7,0,6,2,0,0,4,0,0},{5,0,0,0,7,4,3,0,0},{0,4,9,0,0,0,5,2,0}};
+		int[][] sudo= DancingLinks.sudokuSolver(sudoku);
+		for (int i=0;i<9;i++){
+			System.out.println(Arrays.toString(sudoku[i]));
+		}
+		System.out.println("");
+		for (int i=0;i<9;i++){
+			System.out.println(Arrays.toString(sudo[i]));
+		}
+	}
+	
+	
+	//fonction annexe
+	public static LinkedList<LinkedList<Integer>> subsets(int k,LinkedList<Integer> list){
+		LinkedList<LinkedList<Integer>> l=new LinkedList<LinkedList<Integer>>();
+		if (k==1 ) for (int i:list){LinkedList<Integer> a=new LinkedList<Integer>();a.add(i); l.add(a);}
+		else {
+			LinkedList<Integer> m=new LinkedList<Integer>();
+			for (int i:list){m.add(i);}
+			for (Integer i:m){
+				list.remove(i);
+				LinkedList<Integer> p=new LinkedList<Integer>();
+				for (int j:list){p.add(j);}
+				LinkedList<LinkedList<Integer>> L=subsets(k-1,p);
+				for (LinkedList<Integer> v:L){
+					v.add(i);
+					l.add(v);
+				}
+ 			}
+			
+		}
+		return l;
+	}
 }
 
 	
