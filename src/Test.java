@@ -42,7 +42,7 @@ public class Test {
 		
 		//Question 6
 		//dancingExample1();
-		//dancingAllSizeSubsets(2,4);
+		dancingAllSizeSubsets(2,4);
 		//dancingAllSubsets(10);
 		
 		// Question 8
@@ -321,26 +321,7 @@ public class Test {
 
 	
 	
-	public static LinkedList<LinkedList<Integer>> subsets(int k,LinkedList<Integer> list){
-		LinkedList<LinkedList<Integer>> l=new LinkedList<LinkedList<Integer>>();
-		if (k==1 ) for (int i:list){LinkedList<Integer> a=new LinkedList<Integer>();a.add(i); l.add(a);}
-		else {
-			LinkedList<Integer> m=new LinkedList<Integer>();
-			for (int i:list){m.add(i);}
-			for (Integer i:m){
-				list.remove(i);
-				LinkedList<Integer> p=new LinkedList<Integer>();
-				for (int j:list){p.add(j);}
-				LinkedList<LinkedList<Integer>> L=subsets(k-1,p);
-				for (LinkedList<Integer> v:L){
-					v.add(i);
-					l.add(v);
-				}
- 			}
-			
-		}
-		return l;
-	}
+
 	
 	public static void allSizeSubsets(int k,int n){
 		LinkedList<Integer> list=new LinkedList<Integer>();
@@ -444,9 +425,9 @@ public class Test {
 		Data H = DancingLinks.init(m);
 		LinkedList<LinkedList<LinkedList<Integer>>> o=DancingLinks.exactCover(DancingLinks.init(m));
 		System.out.println(o.size());
-//		for (LinkedList<LinkedList<Integer>> u:o){
-//			System.out.println(u);
-//		}
+		for (LinkedList<LinkedList<Integer>> u:o){
+			System.out.println(u);
+		}
 
 	}
 	
@@ -685,6 +666,28 @@ public class Test {
 		Polyomino.displayPolyominos(result, frame, size, Color.BLACK, primes);
 	}
 	
+	
+	//fonction annexe
+	public static LinkedList<LinkedList<Integer>> subsets(int k,LinkedList<Integer> list){
+		LinkedList<LinkedList<Integer>> l=new LinkedList<LinkedList<Integer>>();
+		if (k==1 ) for (int i:list){LinkedList<Integer> a=new LinkedList<Integer>();a.add(i); l.add(a);}
+		else {
+			LinkedList<Integer> m=new LinkedList<Integer>();
+			for (int i:list){m.add(i);}
+			for (Integer i:m){
+				list.remove(i);
+				LinkedList<Integer> p=new LinkedList<Integer>();
+				for (int j:list){p.add(j);}
+				LinkedList<LinkedList<Integer>> L=subsets(k-1,p);
+				for (LinkedList<Integer> v:L){
+					v.add(i);
+					l.add(v);
+				}
+ 			}
+			
+		}
+		return l;
+	}
 }
 
 	

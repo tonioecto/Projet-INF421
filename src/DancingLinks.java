@@ -150,4 +150,64 @@ public class DancingLinks { // Dans cette classe, on trouve les fonctions
 			return p;
 		}
 	}
+	public static boolean testCarre(int i, int j){
+		if (i<=3 && j<=3){return false;}
+		else if (i>=7 && j>=7)return false;
+		else if (i>3 && i<7 && j<7 && j>3) return false;
+		else return true;}
+
+	public static boolean test(LinkedList<Integer> l,int j){
+		if (l.size()==0 || l.size()==9){return true;}
+		int a=l.pop();
+		boolean res= (a!=j && a%9!=j%9 && !(a/27==j/27 &&!testCarre(a%9,j%9)))&&test(l,j);
+		l.add(a);
+		return res;
+	}
+	public static void build(LinkedList<Integer> a,LinkedList<LinkedList<Integer>> l,int[] ligne,int compt,int[][] sudoku){
+		if (a.size()==9){
+			l.add(Polyomino.copyInt(a)); 
+		}
+		else {
+			if (ligne[compt]==1){compt++;}
+			//System.out.println(compt);
+			for (int k=1;k<=9;k++){
+				if (test(a,compt*9+k)&& sudoku[compt][k-1]==0){
+					a.addLast(compt*9+k);
+					build(a,l,ligne,compt+1,sudoku);
+					a.removeLast();}
+			}
+		}
+	}
+	
+	public static int[][] sudokuSolver(int[][] sudoku){
+		int[][] resultat=new int[9][9];
+		//initialisation de la grille de exact cover pour sudoku
+		LinkedList<LinkedList<Integer>> l=new LinkedList<LinkedList<Integer>>();
+		for (int i=1;i<=9;i++){
+			LinkedList<Integer> a=new LinkedList<Integer>();
+			int[] ligne=new int[9];
+			for (int j=0;j<9;j++){
+				for (int k=0;k<9;k++){
+					if (sudoku[j][k]==i){ligne[j]=1;a.add(j*9+k+1);}
+				}
+			}
+			build(a,l,ligne,0,sudoku);
+		}
+		int[][] m=new int[l.size()][81];
+		System.out.println(l.size());
+		int compteur =0;
+		while (l.size()!=0){
+			LinkedList<Integer> a=l.pop();
+			for (int i=0;i<9;i++){
+				int k=a.pop();
+				//System.out.println(k);
+				m[compteur][k-1]=1;			}
+		}
+		LinkedList<LinkedList<LinkedList<Integer>>> k=DancingLinks.exactCover(DancingLinks.init(m));
+		if (k.size()==0){System.out.println("pas de resultat");return resultat;}
+		else {LinkedList<LinkedList<Integer>> sol=k.pop();
+			//System.out.println(sol);
+			return resultat;}
+	}
+	
 }
