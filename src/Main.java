@@ -592,7 +592,14 @@ public class Main {
 	}
 	public static void testSudo(){
 		int[][] sudoku= new int[][]{{0,3,7,0,0,0,9,5,0},{0,0,5,7,2,0,0,0,4},{0,0,4,0,0,1,7,0,2},{0,0,1,0,0,7,0,0,3},{4,6,0,3,0,5,0,7,9},{9,0,0,6,0,0,8,0,0},{7,0,6,2,0,0,4,0,0},{5,0,0,0,7,4,3,0,0},{0,4,9,0,0,0,5,2,0}};
-		DancingLinks.sudokuSolver(sudoku);
+		int[][] sudo= DancingLinks.sudokuSolver(sudoku);
+		for (int i=0;i<9;i++){
+			System.out.println(Arrays.toString(sudoku[i]));
+		}
+		System.out.println("");
+		for (int i=0;i<9;i++){
+			System.out.println(Arrays.toString(sudo[i]));
+		}
 	}
 	
 	public static void test(){
